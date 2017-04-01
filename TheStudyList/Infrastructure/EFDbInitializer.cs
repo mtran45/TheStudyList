@@ -11,6 +11,7 @@ namespace TheStudyList.Infrastructure
     {
         protected override void Seed(EFDbContext context)
         {
+            // Seed users
             var hasher = new PasswordHasher();
             var user = new User
             {
@@ -28,6 +29,29 @@ namespace TheStudyList.Infrastructure
                 new User {UserName = "user3"},
             };
             users.ForEach(u => context.Users.Add(u));
+            context.SaveChanges();
+
+            // Seed notes
+            var notes = new List<Note>
+            {
+                new Note()
+                {
+                    Title = "Normalisation of DB",
+                    Topic = "Databases",
+                    Notebook = "Computer Science",
+                    User = user,
+                    DueDate = DateTime.Parse("2/4/17")
+                },
+                new Note()
+                {
+                    Title = "Alg 1-2: Analysis of Alg",
+                    Topic = "Algorithms",
+                    Notebook = "Computer Science",
+                    User = user,
+                    DueDate = DateTime.Parse("2/4/17")
+                },
+            };
+            notes.ForEach(n => context.Notes.Add(n));
             context.SaveChanges();
         }
     }

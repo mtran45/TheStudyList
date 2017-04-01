@@ -39,7 +39,7 @@ namespace TheStudyList.Domain.Concrete
                 {
                     dbEntry.Title = note.Title;
                     dbEntry.Links = note.Links;
-                    dbEntry.Category = note.Category;
+                    dbEntry.Notebook = note.Notebook;
                     dbEntry.Topic = note.Topic;
                     dbEntry.TimeEstimate = note.TimeEstimate;
                 }

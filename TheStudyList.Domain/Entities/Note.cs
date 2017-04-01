@@ -7,19 +7,25 @@ namespace TheStudyList.Domain.Entities
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public Dictionary<string, string> Links { get; set; }
         public List<DateTime> ReviewLog { get; set; }
         public DateTime DueDate { get; set; }
-        public string Category { get; set; }
+        public string Notebook { get; set; }
         public string Topic { get; set; }
         public Duration TimeEstimate { get; set; }
         public bool Suspended { get; set; }
 
+        // Navigation properties
         public virtual User User { get; set; }
+        public virtual ICollection<Link> Links { get; set; }
 
         public TimeSpan LastInterval => ReviewLog.Count >= 2 ? 
             ReviewLog[ReviewLog.Count - 1].Subtract(ReviewLog[ReviewLog.Count - 2]) 
             : TimeSpan.Zero;
+
+        public Note()
+        {
+            ReviewLog = new List<DateTime>();
+        }
     }
 
     public enum Duration

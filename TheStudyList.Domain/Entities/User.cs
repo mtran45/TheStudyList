@@ -11,6 +11,10 @@ namespace TheStudyList.Domain.Entities
 {
     public class User : IdentityUser
     {
+        // Navigation properties
+        public virtual ICollection<Book> Books { get; set; }
+        public virtual ICollection<Note> Notes { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

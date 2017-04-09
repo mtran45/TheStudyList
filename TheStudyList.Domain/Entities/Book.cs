@@ -15,7 +15,7 @@ namespace TheStudyList.Domain.Entities
 
         // Navigation properties
         public virtual User User { get; set; }
-        public virtual ICollection<Link> Links { get; set; }
+        public virtual ICollection<Resource> Links { get; set; }
     }
 
     public enum BookStatus { ToRead, Reading, Finished, Postponed }

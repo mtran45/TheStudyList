@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheStudyList.Domain.Entities
 {
-    public class Link
+    public class Resource
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -14,5 +14,7 @@ namespace TheStudyList.Domain.Entities
 
         public virtual Book Book { get; set; }
         public virtual Note Note { get; set; }
+
+        public bool IsEvernote() => Url.Contains("evernote:///");
     }
 }

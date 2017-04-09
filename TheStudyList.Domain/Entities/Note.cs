@@ -16,7 +16,7 @@ namespace TheStudyList.Domain.Entities
 
         // Navigation properties
         public virtual User User { get; set; }
-        public virtual ICollection<Link> Links { get; set; }
+        public virtual ICollection<Resource> Resources { get; set; }
 
         public TimeSpan LastInterval => ReviewLog.Count >= 2 ? 
             ReviewLog[ReviewLog.Count - 1].Subtract(ReviewLog[ReviewLog.Count - 2]) 

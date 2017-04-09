@@ -12,6 +12,7 @@ namespace TheStudyList.Domain.Abstract
     {
         DbSet<Note> Notes { get; }
         DbSet<Book> Books { get; }
+        DbSet<Resource> Resources { get; }
         IDbSet<User> Users { get; }
 
         int SaveChanges();

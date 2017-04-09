@@ -13,6 +13,7 @@
         <th>T</th>
         <th>Due</th>
         <th>Ivl</th>
+        <th>Resources</th>
         <th>User</th>
     </tr>
     @foreach (var note in Model)
@@ -22,6 +23,27 @@
             <td>@note.TimeEstimate</td>
             <td>@note.DueDate.ToString("D")</td>
             <td>@note.LastInterval</td>
+            <td>
+                <ul>
+                    @foreach (var resource in note.Resources)
+                    {
+                        <li>
+                            @if (resource.Url.IsEmpty())
+                            {
+                                @resource.Title
+                            }
+                            else if (resource.IsEvernote())
+                            {
+                                <a href="@resource.Url" class="evernote">@resource.Title</a>
+                            }
+                            else
+                            {
+                                <a href="@resource.Url" target="_blank">@resource.Title</a>
+                            }
+                        </li>
+                    }
+                </ul>
+            </td>
             <td>@note.User.UserName</td>
         </tr>
     }

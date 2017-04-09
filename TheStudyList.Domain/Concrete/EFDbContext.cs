@@ -11,6 +11,7 @@ namespace TheStudyList.Domain.Concrete
     {
         public DbSet<Note> Notes { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Resource> Resources { get; set; }
         // Users DbSet defined in base class
 
         public EFDbContext() : base("name=DefaultConnection") { }
@@ -38,7 +39,7 @@ namespace TheStudyList.Domain.Concrete
                 if (dbEntry != null)
                 {
                     dbEntry.Title = note.Title;
-                    dbEntry.Links = note.Links;
+                    dbEntry.Resources = note.Resources;
                     dbEntry.Notebook = note.Notebook;
                     dbEntry.Topic = note.Topic;
                     dbEntry.TimeEstimate = note.TimeEstimate;

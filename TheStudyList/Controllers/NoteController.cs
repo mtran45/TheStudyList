@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using TheStudyList.Domain.Abstract;
 
 namespace TheStudyList.Controllers
@@ -10,16 +11,21 @@ namespace TheStudyList.Controllers
     public class NoteController : Controller
     {
         private IDbContext db;
+        public Func<string> GetUserId;
 
         public NoteController(IDbContext context)
         {
             db = context;
+            GetUserId = () => User.Identity.GetUserId();
         }
 
         // GET: Note
         public ActionResult Index()
         {
-            return View(db.Notes);
+            string curUser = GetUserId();
+            var notes = db.Notes.Where(note => note.User.Id == curUser)
+                .OrderBy(note => note.DueDate);
+            return View(notes);
         }
 
         // GET: Note/Details/5

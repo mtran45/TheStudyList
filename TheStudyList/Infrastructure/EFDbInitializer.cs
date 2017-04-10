@@ -38,7 +38,7 @@ namespace TheStudyList.Infrastructure
                 Topic = "Databases",
                 Notebook = "Computer Science",
                 User = user,
-                DueDate = DateTime.Parse("2/4/17")
+                DueDate = DateTime.Parse("10/4/17")
             };
 
             var note2 = new Note

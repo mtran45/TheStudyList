@@ -31,3 +31,11 @@ ul {
 .evernote, .evernote:hover {
     color: #69AA35;
 }
+
+table.review .overdue {
+    background-color: #f4c7c3;
+}
+
+table.review .due-today {
+    background-color: #fce8b2;
+}

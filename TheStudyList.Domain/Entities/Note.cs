@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TheStudyList.Domain.Entities
 {
@@ -7,24 +8,23 @@ namespace TheStudyList.Domain.Entities
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public List<DateTime> ReviewLog { get; set; }
+        public int IntervalInDays { get; set; } // Num of days until next review
         public DateTime DueDate { get; set; }
+        public DateTime FirstStudiedDate { get; set; }
         public string Notebook { get; set; }
         public string Topic { get; set; }
         public Duration TimeEstimate { get; set; }
         public bool Suspended { get; set; }
 
         // Navigation properties
+        [Required]
         public virtual User User { get; set; }
         public virtual ICollection<Resource> Resources { get; set; }
-
-        public int LastInterval => ReviewLog.Count < 2
-            ? 0
-            : ReviewLog[ReviewLog.Count - 1].Subtract(ReviewLog[ReviewLog.Count - 2]).Days;
+        public virtual IList<Review> Reviews { get; set; }
 
         public Note()
         {
-            ReviewLog = new List<DateTime>();
+            DueDate = DateTime.UtcNow.Date.Add(TimeSpan.FromDays(1));
         }
     }
 

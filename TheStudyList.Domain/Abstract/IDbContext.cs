@@ -13,17 +13,23 @@ namespace TheStudyList.Domain.Abstract
         DbSet<Note> Notes { get; }
         DbSet<Book> Books { get; }
         DbSet<Resource> Resources { get; }
+        DbSet<Review> Reviews { get; }
         IDbSet<User> Users { get; }
 
         int SaveChanges();
 
-        void SaveNote(Note note);
+        void InsertNote(Note note);
         void DeleteNote(Note note);
         Note GetNoteByID(int? id);
 
-        void SaveBook(Book book);
+        void InsertBook(Book book);
         void DeleteBook(Book book);
         Book GetBookByID(int? id);
+
+        void InsertResource(Resource resource);
+        void DeleteResource(Resource resource);
+
+        void InsertReview(Review review);
 
         User GetUserByID(string id);
     }

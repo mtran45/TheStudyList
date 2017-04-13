@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using TheStudyList.Domain.Abstract;
+using TheStudyList.Domain.Entities;
+using TheStudyList.Models;
 
 namespace TheStudyList.Controllers
 {
@@ -37,23 +39,41 @@ namespace TheStudyList.Controllers
         // GET: Note/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new CreateNoteViewModel());
         }
 
         // POST: Note/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(CreateNoteViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                var note = new Note
+                {
+                    User = db.GetUserByID(GetUserId()),
+                    Title = model.Title,
+                    IntervalInDays = model.IntervalInDays,
+                    DueDate = model.FirstStudiedDate + TimeSpan.FromDays(1),
+                    FirstStudiedDate = model.FirstStudiedDate,
+                    TimeEstimate = model.TimeEstimate
+                };
+                foreach (var resource in model.Resources)
+                {
+                    if (string.IsNullOrWhiteSpace(resource.Title)) continue;
+                    resource.Note = note;
+                    db.InsertResource(resource);
+                }
+                var review = new Review
+                {
+                    Date = note.FirstStudiedDate,
+                    Note = note
+                };
+                db.InsertReview(review);
+                db.InsertNote(note);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(model);
         }
 
         // GET: Note/Edit/5

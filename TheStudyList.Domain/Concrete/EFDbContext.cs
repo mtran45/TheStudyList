@@ -12,9 +12,10 @@ namespace TheStudyList.Domain.Concrete
         public DbSet<Note> Notes { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         // Users DbSet defined in base class
 
-        public EFDbContext() : base("name=DefaultConnection") { }
+        public EFDbContext() : base("name=DefaultConnection", throwIfV1Schema: false) { }
 
         public static EFDbContext Create()
         {
@@ -25,33 +26,17 @@ namespace TheStudyList.Domain.Concrete
         {
             modelBuilder.Configurations.Add(new IdentityUserLoginConfiguration());
             modelBuilder.Configurations.Add(new IdentityUserRoleConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
 
-        public void SaveNote(Note note)
+        public void InsertNote(Note note)
         {
-            if (note.Id == 0)
-            {
-                Notes.Add(note);
-            }
-            else
-            {
-                Note dbEntry = Notes.Find(note.Id);
-                if (dbEntry != null)
-                {
-                    dbEntry.Title = note.Title;
-                    dbEntry.Resources = note.Resources;
-                    dbEntry.Notebook = note.Notebook;
-                    dbEntry.Topic = note.Topic;
-                    dbEntry.TimeEstimate = note.TimeEstimate;
-                }
-            }
-            SaveChanges();
+            Notes.Add(note);
         }
 
         public void DeleteNote(Note note)
         {
             Notes.Remove(note);
-            SaveChanges();
         }
 
         public Note GetNoteByID(int? id)
@@ -59,35 +44,34 @@ namespace TheStudyList.Domain.Concrete
             return Notes.Find(id);
         }
 
-        public void SaveBook(Book book)
+        public void InsertBook(Book book)
         {
-            if (book.Id == 0)
-            {
-                Books.Add(book);
-            }
-            else
-            {
-                Book dbEntry = Books.Find(book.Id);
-                if (dbEntry != null)
-                {
-                    dbEntry.Title = book.Title;
-                    dbEntry.Links = book.Links;
-                    dbEntry.Topic = book.Topic;
-                    dbEntry.Progress = book.Progress;
-                    dbEntry.Status = book.Status;
-                }
-            }
+            Books.Add(book);
         }
 
         public void DeleteBook(Book book)
         {
             Books.Remove(book);
-            SaveChanges();
         }
 
         public Book GetBookByID(int? id)
         {
             return Books.Find(id);
+        }
+
+        public void InsertResource(Resource resource)
+        {
+            Resources.Add(resource);
+        }
+
+        public void DeleteResource(Resource resource)
+        {
+            Resources.Remove(resource);
+        }
+
+        public void InsertReview(Review review)
+        {
+            Reviews.Add(review);
         }
 
         public User GetUserByID(string id)

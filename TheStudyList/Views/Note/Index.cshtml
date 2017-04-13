@@ -17,13 +17,13 @@
     </tr>
     @foreach (var note in Model)
     {
-        <tr class="@(note.DueDate < DateTime.Today ? "overdue" 
-            : note.DueDate == DateTime.Today ? "due-today"
-            : "")">
+        <tr>
             <td>@note.Title</td>
             <td>@note.TimeEstimate</td>
-            <td>@note.DueDate.ToString("dd/MM/yy")</td>
-            <td>@(note.LastInterval)d</td>
+            <td class="@(note.DueDate < DateTime.Today ? "overdue" 
+            : note.DueDate.Date == DateTime.Today ? "due-today"
+            : "")">@note.DueDate.ToString("dd/MM/yy")</td>
+            <td>@(note.IntervalInDays)d</td>
             <td>
                 <ul>
                     @foreach (var resource in note.Resources)

@@ -33,9 +33,12 @@ ul {
 }
 
 table.review .overdue {
-    background-color: #f4c7c3;
+/*    background-color: #f4c7c3;*/
+    color: red;
+    font-weight: bold;
 }
 
 table.review .due-today {
-    background-color: #fce8b2;
+    /*    background-color: #fce8b2;*/
+    color: darkorange;
 }

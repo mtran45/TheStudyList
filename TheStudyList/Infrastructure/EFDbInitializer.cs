@@ -7,7 +7,7 @@ using TheStudyList.Domain.Entities;
 
 namespace TheStudyList.Infrastructure
 {
-    public class EFDbInitializer : System.Data.Entity.DropCreateDatabaseAlways<EFDbContext>
+    public class EFDbInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<EFDbContext>
     {
         protected override void Seed(EFDbContext context)
         {
@@ -38,7 +38,9 @@ namespace TheStudyList.Infrastructure
                 Topic = "Databases",
                 Notebook = "Computer Science",
                 User = user,
-                DueDate = DateTime.Parse("10/4/17")
+                FirstStudiedDate = DateTime.Parse("9/3/17"),
+                DueDate = DateTime.Parse("10/4/17"),
+                IntervalInDays = 14
             };
 
             var note2 = new Note
@@ -47,7 +49,9 @@ namespace TheStudyList.Infrastructure
                 Topic = "Algorithms",
                 Notebook = "Computer Science",
                 User = user,
-                DueDate = DateTime.Parse("2/4/17")
+                FirstStudiedDate = DateTime.Parse("9/3/17"),
+                DueDate = DateTime.Parse("31/3/17"),
+                IntervalInDays = 14
             };
 
             var notes = new List<Note>

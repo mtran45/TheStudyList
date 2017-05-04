@@ -5,24 +5,24 @@
     ViewBag.Title = "To Review";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>Due</h2>
 
 <table class="table table-bordered review">
     <tr>
         <th>Title</th>
-        <th>T</th>
+        <th>Time</th>
         <th>Due</th>
         <th>Ivl</th>
         <th>Resources</th>
+        <th>Study</th>
     </tr>
-    @foreach (var note in Model)
+    @foreach (var note in Model.Where(n => n.DueDate.Date <= DateTime.Today))
     {
         <tr>
             <td>@note.Title</td>
             <td>@note.TimeEstimate</td>
             <td class="@(note.DueDate < DateTime.Today ? "overdue" 
-            : note.DueDate.Date == DateTime.Today ? "due-today"
-            : "")">@note.DueDate.ToString("dd/MM/yy")</td>
+            : "due-today")">@note.DueDate.ToString("dd/MM/yy")</td>
             <td>@(note.IntervalInDays)d</td>
             <td>
                 <ul>
@@ -45,7 +45,61 @@
                     }
                 </ul>
             </td>
+            <td>@Html.ActionLink("✔", "Study", "Note", new { id = note.Id }, 
+               new { @class = "btn btn-success", id = "btn-study" })</td>
         </tr>
     }
 </table>
+
+<h2>Upcoming</h2>
+
+<table class="table table-bordered review">
+    <tr>
+        <th>Title</th>
+        <th>Time</th>
+        <th>Due</th>
+        <th>Ivl</th>
+        <th>Resources</th>
+        <th>Study</th>
+    </tr>
+    @foreach (var note in Model.Where(n => n.DueDate.Date > DateTime.Today))
+    {
+        <tr>
+            <td>@note.Title</td>
+            <td>@note.TimeEstimate</td>
+            <td class="@(note.DueDate < DateTime.Today ? "overdue"
+            : note.DueDate.Date == DateTime.Today ? "due-today"
+            : "")">
+                @note.DueDate.ToString("dd/MM/yy")
+        </td>
+        <td>@(note.IntervalInDays)d</td>
+        <td>
+            <ul>
+                @foreach (var resource in note.Resources)
+                {
+                    <li>
+                        @if (resource.Url.IsEmpty())
+                        {
+                            @resource.Title
+                        }
+                        else if (resource.IsEvernote())
+                        {
+                            <a href="@resource.Url" class="evernote">@resource.Title</a>
+                        }
+                        else
+                        {
+                            <a href="@resource.Url" target="_blank">@resource.Title</a>
+                        }
+                    </li>
+                }
+            </ul>
+        </td>
+        <td>
+            @Html.ActionLink("✔", "Study", "Note", new { id = note.Id },
+               new { @class = "btn btn-success", id = "btn-study" })
+    </td>
+</tr>
+    }
+</table>
+
 

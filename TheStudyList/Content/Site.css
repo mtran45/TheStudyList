@@ -32,6 +32,10 @@ ul {
     color: #69AA35;
 }
 
+table.review {
+    table-layout: fixed;
+}
+
 table.review .overdue {
 /*    background-color: #f4c7c3;*/
     color: red;
@@ -41,4 +45,20 @@ table.review .overdue {
 table.review .due-today {
     /*    background-color: #fce8b2;*/
     color: darkorange;
+}
+
+#btn-study {
+    height: 30px;
+    width: 30px;
+    padding: 3px;
+}
+
+#well-study {
+    width: 300px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#well-study .btn {
+    height: 55px;
 }

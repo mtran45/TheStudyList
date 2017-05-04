@@ -119,5 +119,30 @@ namespace TheStudyList.Controllers
                 return View();
             }
         }
+
+        public ActionResult Study(int? id)
+        {
+            Note note = db.GetNoteByID(id);
+            if (note == null)
+            {
+                return HttpNotFound();
+            }
+            return View(note);
+        }
+
+        [HttpPost]
+        public ActionResult Study(int id, int? ivl)
+        {
+            Note note = db.GetNoteByID(id);
+            if (ivl == null || ivl <= 0)
+            {
+                TempData["message"] = "Invalid interval";
+                return View(note);
+            }
+            note.UpdateInterval((int)ivl);
+            note.User = db.GetUserByID(GetUserId());
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -26,6 +26,12 @@ namespace TheStudyList.Domain.Entities
         {
             DueDate = DateTime.UtcNow.Date.Add(TimeSpan.FromDays(1));
         }
+
+        public void UpdateInterval(int ivl)
+        {
+            IntervalInDays = ivl;
+            DueDate = DateTime.UtcNow.Date.Add(TimeSpan.FromDays(ivl));
+        }
     }
 
     public enum Duration

@@ -2,9 +2,9 @@
 
 @{
     ViewBag.Title = "Study";
-    int hard = Model.IntervalInDays;
-    int good = (int)(Model.IntervalInDays * 1.5);
-    int easy = Model.IntervalInDays * 2;
+    int hard = Model.IntervalHard();
+    int good = Model.IntervalGood();
+    int easy = Model.IntervalEasy();
 }
 
 <h2>@Model.Title</h2>

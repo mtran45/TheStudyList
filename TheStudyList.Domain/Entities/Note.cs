@@ -24,13 +24,31 @@ namespace TheStudyList.Domain.Entities
 
         public Note()
         {
-            DueDate = DateTime.UtcNow.Date.Add(TimeSpan.FromDays(1));
+            DueDate = DateTime.UtcNow.Add(TimeSpan.FromDays(1));
         }
 
         public void UpdateInterval(int ivl)
         {
             IntervalInDays = ivl;
-            DueDate = DateTime.UtcNow.Date.Add(TimeSpan.FromDays(ivl));
+            DueDate = DateTime.UtcNow.Add(TimeSpan.FromDays(ivl));
+        }
+
+        // Return the interval in days for a "hard" review
+        public int IntervalHard()
+        {
+            return IntervalInDays;
+        }
+
+        // Return the interval in days for a "good" review
+        public int IntervalGood()
+        {
+            return IntervalInDays == 1 ? 2 : (int)(IntervalInDays * 1.5);
+        }
+
+        // Return the interval in days for a "easy" review
+        public int IntervalEasy()
+        {
+            return IntervalInDays == 1 ? 3 : IntervalInDays * 2;
         }
     }
 

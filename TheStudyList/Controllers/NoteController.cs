@@ -141,6 +141,12 @@ namespace TheStudyList.Controllers
             }
             note.UpdateInterval((int)ivl);
             note.User = db.GetUserByID(GetUserId());
+            var review = new Review
+            {
+                Date = DateTime.UtcNow,
+                Note = note
+            };
+            db.InsertReview(review);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

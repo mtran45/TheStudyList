@@ -14,11 +14,15 @@ namespace TheStudyList.Tests
         public TestContext()
         {
             this.Notes = new TestDbSet<Note>();
+            this.Resources = new TestDbSet<Resource>();
+            this.Reviews = new TestDbSet<Review>();
+            this.Users = new TestDbSet<User>();
         }
 
         public DbSet<Note> Notes { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Review> Reviews { get; set;  }
         public IDbSet<User> Users { get; set; }
 
         public int SaveChangesCount { get; private set; }
@@ -29,25 +33,9 @@ namespace TheStudyList.Tests
             return 1;
         }
 
-        public void SaveNote(Note note)
+        public void InsertNote(Note note)
         {
-            if (note.Id == 0)
-            {
-                Notes.Add(note);
-            }
-            else
-            {
-                Note dbEntry = Notes.Find(note.Id);
-                if (dbEntry != null)
-                {
-                    dbEntry.Title = note.Title;
-                    dbEntry.Resources = note.Resources;
-                    dbEntry.Notebook = note.Notebook;
-                    dbEntry.Topic = note.Topic;
-                    dbEntry.TimeEstimate = note.TimeEstimate;
-                }
-            }
-            SaveChanges();
+            Notes.Add(note);
         }
 
         public void DeleteNote(Note note)
@@ -61,24 +49,39 @@ namespace TheStudyList.Tests
             return Notes.FirstOrDefault(n => n.Id == id);
         }
 
-        public void SaveBook(Book book)
+        public void InsertBook(Book book)
         {
-            throw new NotImplementedException();
+            Books.Add(book);
         }
 
         public void DeleteBook(Book book)
         {
-            throw new NotImplementedException();
+            Books.Remove(book);
         }
 
         public Book GetBookByID(int? id)
         {
-            throw new NotImplementedException();
+            return Books.FirstOrDefault(b => b.Id == id);
+        }
+
+        public void InsertResource(Resource resource)
+        {
+            Resources.Add(resource);
+        }
+
+        public void DeleteResource(Resource resource)
+        {
+            Resources.Remove(resource);
+        }
+
+        public void InsertReview(Review review)
+        {
+            Reviews.Add(review);
         }
 
         public User GetUserByID(string id)
         {
-            throw new NotImplementedException();
+            return Users.FirstOrDefault(u => u.Id == id);
         }
     }
 }

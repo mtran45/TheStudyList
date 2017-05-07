@@ -10,13 +10,17 @@ namespace TheStudyList.Models
     {
         [Required]
         public string Title { get; set; }
+
         [Required]
         [DisplayName("Interval (Days)")]
         public int IntervalInDays { get; set; }
+
         [Required]
         [DisplayName("First Studied Date")]
         public DateTime FirstStudiedDate { get; set; }
+
         public List<Resource> Resources { get; set; }
+
         [DisplayName("Time Estimate")]
         public Duration TimeEstimate { get; set; }
 

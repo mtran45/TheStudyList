@@ -71,31 +71,37 @@ namespace TheStudyList.Controllers
                 db.InsertReview(review);
                 db.InsertNote(note);
                 db.SaveChanges();
+                TempData["successMsg"] = $"Successfully created the note \"{note.Title}\".";
                 return RedirectToAction("Index");
             }
+            TempData["errorMsg"] = "Failed. Please check the fields and try again.";
             return View(model);
         }
 
         // GET: Note/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            Note note = db.GetNoteByID(id);
+            if (note == null)
+            {
+                return HttpNotFound();
+            }
+            return View(note);
         }
 
         // POST: Note/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Note note)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.UpdateNote(note);
+                db.SaveChanges();
+                TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            TempData["errorMsg"] = "Failed to update note. Invalid data.";
+            return View(note);
         }
 
         // GET: Note/Delete/5
@@ -136,11 +142,10 @@ namespace TheStudyList.Controllers
             Note note = db.GetNoteByID(id);
             if (ivl == null || ivl <= 0)
             {
-                TempData["message"] = "Invalid interval";
+                TempData["errorMsg"] = "Invalid interval.";
                 return View(note);
             }
             note.UpdateInterval((int)ivl);
-            note.User = db.GetUserByID(GetUserId());
             var review = new Review
             {
                 Date = DateTime.UtcNow,

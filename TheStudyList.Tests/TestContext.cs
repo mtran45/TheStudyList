@@ -44,6 +44,10 @@ namespace TheStudyList.Tests
             SaveChanges();
         }
 
+        public void UpdateNote(Note note)
+        {
+        }
+
         public Note GetNoteByID(int? id)
         {
             return Notes.FirstOrDefault(n => n.Id == id);

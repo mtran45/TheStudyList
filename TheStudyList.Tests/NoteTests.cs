@@ -129,5 +129,26 @@ namespace TheStudyList.Tests
             Assert.AreEqual(savedNote, savedReview.Note);
             Assert.AreEqual(DateTime.Today, savedReview.Date.Date);
         }
+
+        [TestMethod]
+        public void Can_Edit_Note()
+        {
+            // Arrange
+            var context = new TestContext();
+
+            context.Notes.Add(new Note() { Id = 1, Title = "Note 1", DueDate = DateTime.Parse("02-01-17"), User = user });
+
+            // Arrange - create the controller
+            NoteController target = new NoteController(context)
+            {
+                GetUserId = () => user.Id
+            };
+
+            // Act
+            Note note = ((ViewResult) target.Edit(1)).ViewData.Model as Note;
+
+            // Assert - ensure correct note is passed to View
+            Assert.AreEqual("Note 1", note.Title);
+        }
     }
 }

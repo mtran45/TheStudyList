@@ -39,6 +39,11 @@ namespace TheStudyList.Domain.Concrete
             Notes.Remove(note);
         }
 
+        public void UpdateNote(Note note)
+        {
+            Entry(note).State = EntityState.Modified;
+        }
+
         public Note GetNoteByID(int? id)
         {
             return Notes.Find(id);

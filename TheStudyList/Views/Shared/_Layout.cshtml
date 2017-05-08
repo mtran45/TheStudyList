@@ -32,9 +32,13 @@
         </div>
     </div>
 <div class="container body-content">
-    @if (TempData["message"] != null)
+    @if (TempData["errorMsg"] != null)
     {
-        <div class="alert alert-success">@TempData["message"]</div>
+        <div class="alert alert-danger">@TempData["errorMsg"]</div>
+    }
+    @if (TempData["successMsg"] != null)
+    {
+        <div class="alert alert-success">@TempData["successMsg"]</div>
     }
     @RenderBody()
     <hr/>

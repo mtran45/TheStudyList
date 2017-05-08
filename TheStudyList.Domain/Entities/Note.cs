@@ -17,7 +17,6 @@ namespace TheStudyList.Domain.Entities
         public bool Suspended { get; set; }
 
         // Navigation properties
-        [Required]
         public virtual User User { get; set; }
         public virtual ICollection<Resource> Resources { get; set; }
         public virtual IList<Review> Reviews { get; set; }

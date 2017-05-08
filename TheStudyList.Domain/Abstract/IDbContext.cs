@@ -20,6 +20,7 @@ namespace TheStudyList.Domain.Abstract
 
         void InsertNote(Note note);
         void DeleteNote(Note note);
+        void UpdateNote(Note note);
         Note GetNoteByID(int? id);
 
         void InsertBook(Book book);

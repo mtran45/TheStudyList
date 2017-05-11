@@ -309,6 +309,7 @@
     <Content Include="Views\Note\Study.cshtml" />
     <Content Include="Views\Note\Edit.cshtml" />
     <Content Include="Views\Note\StudyListTable.cshtml" />
+    <Content Include="Views\Note\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

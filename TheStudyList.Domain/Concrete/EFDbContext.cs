@@ -36,6 +36,8 @@ namespace TheStudyList.Domain.Concrete
 
         public void DeleteNote(Note note)
         {
+            if (note.Resources != null) Resources.RemoveRange(note.Resources);
+            if (note.Reviews != null) Reviews.RemoveRange(note.Reviews);
             Notes.Remove(note);
         }
 

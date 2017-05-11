@@ -30,12 +30,6 @@ namespace TheStudyList.Controllers
             return View(notes);
         }
 
-        // GET: Note/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: Note/Create
         public ActionResult Create()
         {
@@ -129,27 +123,28 @@ namespace TheStudyList.Controllers
         }
 
         // GET: Note/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            Note note = db.GetNoteByID(id);
+            if (note == null)
+            {
+                return HttpNotFound();
+            }
+            return View(note);
         }
 
         // POST: Note/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            Note note = db.GetNoteByID(id);
+            db.DeleteNote(note);
+            db.SaveChanges();
+            TempData["successMsg"] = "Successfully deleted note.";
+            return RedirectToAction("Index");
         }
 
+        // GET: Note/Study/5
         public ActionResult Study(int? id)
         {
             Note note = db.GetNoteByID(id);
@@ -160,6 +155,7 @@ namespace TheStudyList.Controllers
             return View(note);
         }
 
+        // POST: Note/Study/5
         [HttpPost]
         public ActionResult Study(int id, int? ivl)
         {

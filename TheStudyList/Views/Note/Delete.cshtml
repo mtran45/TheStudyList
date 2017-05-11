@@ -1,0 +1,88 @@
+﻿@model TheStudyList.Domain.Entities.Note
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Note</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IntervalInDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IntervalInDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DueDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DueDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstStudiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstStudiedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notebook)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notebook)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Topic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Topic)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeEstimate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeEstimate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Suspended)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Suspended)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

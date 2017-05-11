@@ -29,6 +29,7 @@ namespace TheStudyList.Domain.Abstract
 
         void InsertResource(Resource resource);
         void DeleteResource(Resource resource);
+        void UpdateResource(Resource resource);
 
         void InsertReview(Review review);
 

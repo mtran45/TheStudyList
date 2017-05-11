@@ -71,7 +71,13 @@ namespace TheStudyList.Domain.Concrete
 
         public void DeleteResource(Resource resource)
         {
+            Resources.Attach(resource);
             Resources.Remove(resource);
+        }
+
+        public void UpdateResource(Resource resource)
+        {
+            Entry(resource).State = EntityState.Modified;
         }
 
         public void InsertReview(Review review)

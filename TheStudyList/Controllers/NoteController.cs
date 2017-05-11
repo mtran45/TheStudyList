@@ -91,10 +91,11 @@ namespace TheStudyList.Controllers
 
         // POST: Note/Edit/5
         [HttpPost]
-        public ActionResult Edit(Note note)
+        public ActionResult Edit(Note note, List<Resource> resourcesList)
         {
             if (ModelState.IsValid)
             {
+                UpdateNoteResources(note, resourcesList);
                 db.UpdateNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
@@ -102,6 +103,29 @@ namespace TheStudyList.Controllers
             }
             TempData["errorMsg"] = "Failed to update note. Invalid data.";
             return View(note);
+        }
+
+        private void UpdateNoteResources(Note note, List<Resource> resources)
+        {
+            // Reverse so items are inserted in correct order
+            resources.Reverse();
+            foreach (var resource in resources)
+            {
+                if (resource.Id != 0)
+                {
+                    if (String.IsNullOrEmpty(resource.Title))
+                        db.DeleteResource(resource);
+                    else
+                    {
+                        db.UpdateResource(resource);
+                    }
+                }
+                else if (!String.IsNullOrEmpty(resource.Title))
+                {
+                    resource.Note = note;
+                    db.InsertResource(resource);
+                }
+            }
         }
 
         // GET: Note/Delete/5

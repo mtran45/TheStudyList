@@ -1,7 +1,10 @@
-﻿@model TheStudyList.Domain.Entities.Note
+﻿@using TheStudyList.Domain.Entities
+@model Note
 
 @{
     ViewBag.Title = "Edit";
+    List<Resource> resources = Model.Resources.ToList();
+    int maxResources = 3;
 }
 
 <h2>Edit</h2>
@@ -71,13 +74,27 @@
                 @Html.ValidationMessageFor(model => model.TimeEstimate, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        
         <div class="form-group">
-            @Html.LabelFor(model => model.Suspended, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Resources, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Suspended)
-                    @Html.ValidationMessageFor(model => model.Suspended, "", new { @class = "text-danger" })
+                <div class="form-inline">
+                    @for (var i = 0; i < maxResources; i++)
+                    { 
+                        <div>
+                            @if (i < resources.Count)
+                            {
+                                @Html.Hidden($"resourcesList[{i}].Id", resources[i].Id)
+                                @Html.TextBox($"resourcesList[{i}].Title", resources[i].Title, new {@class = "form-control", placeholder = "Resource " + (i + 1)})
+                                @Html.TextBox($"resourcesList[{i}].Url", resources[i].Url, new {@class = "form-control", placeholder = $"http://resource{i + 1}.com"})
+                            }
+                            else
+                            {
+                                @Html.TextBox($"resourcesList[{i}].Title", null, new { @class = "form-control", placeholder = "Resource " + (i + 1) })
+                                @Html.TextBox($"resourcesList[{i}].Url", null, new { @class = "form-control", placeholder = $"http://resource{i + 1}.com" })
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </div>

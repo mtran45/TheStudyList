@@ -78,6 +78,10 @@ namespace TheStudyList.Tests
             Resources.Remove(resource);
         }
 
+        public void UpdateResource(Resource resource)
+        {
+        }
+
         public void InsertReview(Review review)
         {
             Reviews.Add(review);

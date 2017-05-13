@@ -24,6 +24,7 @@ namespace TheStudyList.Domain.Entities
         public Note()
         {
             DueDate = DateTime.UtcNow.Add(TimeSpan.FromDays(1));
+            FirstStudiedDate = DateTime.UtcNow;
         }
 
         public void UpdateInterval(int ivl)
@@ -53,6 +54,9 @@ namespace TheStudyList.Domain.Entities
 
     public enum Duration
     {
-        Short, Medium, Long
+        Unspecified = 0,
+        Short = 1,
+        Medium = 2,
+        Long = 3
     }
 }

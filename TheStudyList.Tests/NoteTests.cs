@@ -150,5 +150,41 @@ namespace TheStudyList.Tests
             // Assert - ensure correct note is passed to View
             Assert.AreEqual("Note 1", note.Title);
         }
+
+        [TestMethod]
+        public void Can_Import_Notes_From_TSV()
+        {
+            // Arrange
+            var context = new TestContext();
+            context.Users.Add(user);
+
+            // Arrange - create the controller
+            NoteController target = new NoteController(context)
+            {
+                GetUserId = () => user.Id
+            };
+
+            // Act
+            string notebook = "Computer Science";
+            string tsv = @"Topic	T	Due	Ivl
+CTCI IV - Before the Interview	1	14 May	21d
+OOP Principles	3	14 May	4w
+Queue	2	14 May	27d";
+            target.Import(notebook, tsv);
+
+            // Assert
+            Assert.AreEqual(3, context.Notes.Count());
+
+            var notes = context.Notes.ToList();
+            Assert.AreEqual("CTCI IV - Before the Interview", notes[0].Title);
+            Assert.AreEqual(Duration.Short, notes[0].TimeEstimate);
+            Assert.AreEqual(DateTime.Parse("14/5/17"), notes[0].DueDate);
+            Assert.AreEqual(21, notes[0].IntervalInDays);
+            Assert.AreEqual(notebook, notes[0].Notebook);
+            Assert.AreEqual(user, notes[0].User);
+
+            Assert.AreEqual(Duration.Long, notes[1].TimeEstimate);
+            Assert.AreEqual(4*7, notes[1].IntervalInDays);
+        }
     }
 }

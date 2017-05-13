@@ -62,3 +62,9 @@ table.review .due-today {
 #well-study .btn {
     height: 55px;
 }
+
+#import-tsv {
+    height: 500px;
+    resize: none;
+    max-width: 100%;
+}

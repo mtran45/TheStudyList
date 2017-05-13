@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Razor.Text;
+using CsvHelper;
 using Microsoft.AspNet.Identity;
 using TheStudyList.Domain.Abstract;
 using TheStudyList.Domain.Entities;
@@ -175,6 +179,54 @@ namespace TheStudyList.Controllers
             db.InsertReview(review);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Import()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Import(string notebook, string tsvString)
+        {
+            int entries = 0;
+            using (TextReader tr = new StringReader(tsvString))
+            {
+                var tsv = new CsvReader(tr);
+                tsv.Configuration.Delimiter = "\t";
+                while (tsv.Read())
+                {
+                    var note = new Note
+                    {
+                        User = db.GetUserByID(GetUserId()),
+                        Title = tsv.GetField<string>(0),
+                        TimeEstimate = tsv.GetField<Duration>(1),
+                        DueDate = tsv.GetField<DateTime>(2),
+                        IntervalInDays = ParseInterval(tsv.GetField<string>(3)),
+                        Notebook = notebook
+                    };
+                    db.InsertNote(note);
+                    entries++;
+                }
+                db.SaveChanges();
+            }
+            TempData["successMsg"] = $"Successfully imported {entries} notes.";
+            return RedirectToAction("Index");
+        }
+
+        private int ParseInterval(string str)
+        {
+            // Parses interval string of form "14d" or "3w" and returns num of days
+            var match = Regex.Match(str, @"(\d+)([dw])");
+            // number of days or weeks
+            int count = int.Parse(match.Groups[1].Value);
+            // day or week
+            string period = match.Groups[2].Value;
+            if (period == "d")
+                return count;
+            else if (period == "w")
+                return count * 7;
+            else return 1; // fallback to 1
         }
     }
 }

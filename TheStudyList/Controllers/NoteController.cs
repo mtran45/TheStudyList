@@ -10,6 +10,7 @@ using TheStudyList.Models;
 
 namespace TheStudyList.Controllers
 {
+    [Authorize]
     public class NoteController : Controller
     {
         private IDbContext db;

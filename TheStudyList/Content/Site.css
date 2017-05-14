@@ -32,18 +32,23 @@ ul {
     color: #69AA35;
 }
 
+/* Index */
+
 table.review {
     table-layout: fixed;
+    width: 700px;
+}
+
+table.review tr td {
+    vertical-align: middle;
 }
 
 table.review .overdue {
-/*    background-color: #f4c7c3;*/
     color: red;
     font-weight: bold;
 }
 
 table.review .due-today {
-    /*    background-color: #fce8b2;*/
     color: darkorange;
 }
 
@@ -53,6 +58,19 @@ table.review .due-today {
     padding: 3px;
 }
 
+.time-est-1 {
+    background-color: #d9ead3;
+}
+
+.time-est-2 {
+    background-color: #fce8b2;
+}
+
+.time-est-3 {
+    background-color: #f4c7c3;
+}
+
+/* Study */
 #well-study {
     width: 300px;
     display: flex;
@@ -63,6 +81,7 @@ table.review .due-today {
     height: 55px;
 }
 
+/* Import */
 #import-tsv {
     height: 500px;
     resize: none;

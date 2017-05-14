@@ -3,28 +3,28 @@
 
 <table class="table table-bordered review">
     <tr>
-        <th>Title</th>
-        <th>Time</th>
-        <th>Due</th>
-        <th>Ivl</th>
-        <th>Resources</th>
-        <th>Study</th>
+        <th style="width: 150px">Title</th>
+        <th class="text-center" style="width: 42px">Time</th>
+        <th class="text-center" style="width: 50px">Due</th>
+        <th class="text-center" style="width: 35px">Ivl</th>
+        <th style="width: 130px">Resources</th>
+        <th class="text-center" style="width: 37px">Study</th>
     </tr>
     @foreach (var note in Model)
     {
         <tr>
-            <td>@Html.ActionLink(note.Title, "Edit", new { id = note.Id })</td>
-            <td>@note.TimeEstimate</td>
-            <td class="@(note.DueDate < DateTime.Today ? "overdue"
-            : note.DueDate.Date == DateTime.Today ? "due-today"
-            : "")">
-                @note.DueDate.ToString("dd/MM/yy")
+            <td>@Html.ActionLink(note.Title, "Edit", new {id = note.Id})</td>
+            <td class="text-center time-est-@((int)note.TimeEstimate)">@note.TimeEstimate</td>
+            <td class="text-center @(note.DueDate < DateTime.Today ? "overdue"
+                             : note.DueDate.Date == DateTime.Today ? "due-today"
+                                 : "")">
+                @note.DueDate.ToString("dd MMM")
             </td>
-            <td>@(note.IntervalInDays)d</td>
+            <td class="text-center">@(note.IntervalInDays)d</td>
             <td>
                 <ul>
                     @foreach (var resource in note.Resources)
-                {
+                    {
                         <li>
                             @if (resource.Url.IsEmpty())
                             {
@@ -42,9 +42,9 @@
                     }
                 </ul>
             </td>
-            <td>
-                @Html.ActionLink("✔", "Study", "Note", new { id = note.Id },
-               new { @class = "btn btn-success", id = "btn-study" })
+            <td class="text-center">
+                @Html.ActionLink("✔", "Study", "Note", new {id = note.Id},
+                    new {@class = "btn btn-success", id = "btn-study"})
             </td>
         </tr>
     }

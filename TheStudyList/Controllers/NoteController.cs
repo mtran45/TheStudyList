@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,7 +31,9 @@ namespace TheStudyList.Controllers
         public ActionResult Index()
         {
             string curUser = GetUserId();
-            var notes = db.Notes.Where(note => note.User.Id == curUser)
+            var notes = db.Notes
+                .Include(note => note.Resources)
+                .Where(note => note.User.Id == curUser)
                 .OrderBy(note => note.DueDate);
             return View(notes);
         }

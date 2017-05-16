@@ -7,7 +7,7 @@ using TheStudyList.Domain.Entities;
 
 namespace TheStudyList.Infrastructure
 {
-    public class EFDbInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<EFDbContext>
+    public class EFDbInitializer : System.Data.Entity.CreateDatabaseIfNotExists<EFDbContext>
     {
         protected override void Seed(EFDbContext context)
         {

@@ -50,6 +50,20 @@ namespace TheStudyList.Domain.Entities
         {
             return IntervalInDays == 1 ? 3 : IntervalInDays * 2;
         }
+
+        // Return true if due date is today in user's timezone
+        public bool IsDue()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DueDate.Date, User.TimeZone)
+                   == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, User.TimeZone);
+        }
+
+        // Return true if due date has passed in user's timezone
+        public bool IsOverdue()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DueDate.Date, User.TimeZone)
+                < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, User.TimeZone);
+        }
     }
 
     public enum Duration

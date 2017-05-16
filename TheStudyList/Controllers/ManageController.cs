@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using TheStudyList.Domain.Abstract;
 using TheStudyList.Models;
 
 namespace TheStudyList.Controllers
@@ -15,9 +16,13 @@ namespace TheStudyList.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IDbContext db;
+        public Func<string> GetUserId;
 
-        public ManageController()
+        public ManageController(IDbContext context)
         {
+            db = context;
+            GetUserId = () => User.Identity.GetUserId();
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -70,7 +75,8 @@ namespace TheStudyList.Controllers
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                TimeZone = db.GetUserByID(GetUserId()).TimeZone
             };
             return View(model);
         }
@@ -320,6 +326,34 @@ namespace TheStudyList.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        // GET: /Manage/ChangeTimezone
+        public ActionResult ChangeTimeZone()
+        {
+            var user = db.GetUserByID(GetUserId());
+            ViewBag.TimeZoneId = user.TimeZoneId;
+            return View();
+        }
+
+        // POST: /Manage/ChangeTimezone
+        [HttpPost]
+        public ActionResult ChangeTimeZone(string timeZoneId)
+        {
+            var user = db.GetUserByID(GetUserId());
+            try
+            {
+                user.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                TempData["errorMsg"] = "Invalid timezone.";
+                return View();
+            }
+            TempData["successMsg"] = "Successfully updated timezone.";
+            db.UpdateUser(user);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Change Timezone";
+    var timeZoneIds = TimeZoneInfo.GetSystemTimeZones().Select(tz =>
+    new SelectListItem()
+    {
+        Value = tz.Id,
+        Text = tz.DisplayName,
+        Selected = tz.Id == ViewBag.TimeZoneId
+    });
+}
+
+<h2>Change Timezone</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.Label("Timezone")
+        @Html.DropDownList("timeZoneId", timeZoneIds, new {@class = "form-control"})
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+}

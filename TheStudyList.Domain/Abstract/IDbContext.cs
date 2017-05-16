@@ -33,6 +33,7 @@ namespace TheStudyList.Domain.Abstract
 
         void InsertReview(Review review);
 
+        void UpdateUser(User user);
         User GetUserByID(string id);
     }
 }

@@ -33,6 +33,7 @@ namespace TheStudyList.Controllers
             string curUser = GetUserId();
             var notes = db.Notes
                 .Include(note => note.Resources)
+                .Include(note => note.User)
                 .Where(note => note.User.Id == curUser)
                 .OrderBy(note => note.DueDate);
             return View(notes);

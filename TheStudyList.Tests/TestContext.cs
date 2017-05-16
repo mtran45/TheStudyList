@@ -87,6 +87,10 @@ namespace TheStudyList.Tests
             Reviews.Add(review);
         }
 
+        public void UpdateUser(User user)
+        {
+        }
+
         public User GetUserByID(string id)
         {
             return Users.FirstOrDefault(u => u.Id == id);

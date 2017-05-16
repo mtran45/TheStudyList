@@ -87,6 +87,11 @@ namespace TheStudyList.Domain.Concrete
             Reviews.Add(review);
         }
 
+        public void UpdateUser(User user)
+        {
+            Entry(user).State = EntityState.Modified;
+        }
+
         public User GetUserByID(string id)
         {
             return Users.Find(id);

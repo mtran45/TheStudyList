@@ -8,8 +8,8 @@
 
 <h2>Due</h2>
 
-@Html.Partial("StudyListTable", Model.Where(n => n.DueDate.Date <= DateTime.Today))
+@Html.Partial("StudyListTable", Model.Where(n => n.IsDue() || n.IsOverdue()))
 
 <h2>Upcoming</h2>
 
-@Html.Partial("StudyListTable", Model.Where(n => n.DueDate.Date > DateTime.Today))
+@Html.Partial("StudyListTable", Model.Where(n => !n.IsDue() && !n.IsOverdue()))

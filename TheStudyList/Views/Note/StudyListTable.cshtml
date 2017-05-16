@@ -20,8 +20,8 @@
                 <td class="text-center time-est-@((int) note.TimeEstimate)">@note.TimeEstimate</td>
                 <td class="text-center @(note.IsOverdue() ? "overdue"
                                          : note.IsDue() ? "due-today"
-                                         : "")">
-                    @note.DueDate.ToString("dd MMM")
+                                         : "")" title="UTC: @note.DueDate.ToString() &#13;Local: @note.DueDateLocal.ToString()">
+                    @note.DueDateLocal.ToString("dd MMM")
                 </td>
                 <td class="text-center">@(note.IntervalInDays)d</td>
                 <td>

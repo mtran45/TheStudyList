@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheStudyList.Domain.Entities
 {
@@ -26,6 +27,9 @@ namespace TheStudyList.Domain.Entities
             DueDate = DateTime.UtcNow.Add(TimeSpan.FromDays(1));
             FirstStudiedDate = DateTime.UtcNow;
         }
+
+        [NotMapped]
+        public DateTime DueDateLocal => TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone);
 
         public void UpdateInterval(int ivl)
         {
@@ -54,15 +58,15 @@ namespace TheStudyList.Domain.Entities
         // Return true if due date is today in user's timezone
         public bool IsDue()
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(DueDate.Date, User.TimeZone)
-                   == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, User.TimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone).Date
+                   == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, User.TimeZone).Date;
         }
 
         // Return true if due date has passed in user's timezone
         public bool IsOverdue()
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(DueDate.Date, User.TimeZone)
-                < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, User.TimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone).Date
+                < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, User.TimeZone).Date;
         }
     }
 

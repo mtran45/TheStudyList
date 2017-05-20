@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using TheStudyList;
 using TheStudyList.Controllers;
 
@@ -13,10 +14,12 @@ namespace TheStudyList.Tests.Controllers
     public class HomeControllerTest
     {
         [TestMethod]
-        public void Index()
+        public void Index_View_When_Logged_Out()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var mock = new Mock<ControllerContext>();
+            mock.SetupGet(p => p.HttpContext.User.Identity.IsAuthenticated).Returns(false);
+            HomeController controller = new HomeController {ControllerContext = mock.Object};
 
             // Act
             ViewResult result = controller.Index() as ViewResult;

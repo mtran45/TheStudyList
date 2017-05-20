@@ -186,23 +186,5 @@ Queue	2	14 May	27d";
             Assert.AreEqual(Duration.Long, notes[1].TimeEstimate);
             Assert.AreEqual(4*7, notes[1].IntervalInDays);
         }
-
-        [TestMethod]
-        public void Returns_True_If_Note_Due()
-        {
-            // Arrange
-            var note = new Note()
-            {
-                Id = 1,
-                Title = "Note 1",
-                IntervalInDays = 1,
-                FirstStudiedDate = DateTime.Parse("01-01-17"),
-                DueDate = DateTime.Parse("17-05-17 13:00").ToUniversalTime(),
-                Resources = new List<Resource>(),
-                User = user
-            };
-
-            Assert.AreEqual(true, note.IsDue());
-        }
     }
 }

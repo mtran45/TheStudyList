@@ -72,7 +72,7 @@ namespace TheStudyList.Domain.Entities
 
     public enum Duration
     {
-        Unspecified = 0,
+        Unset = 0,
         Short = 1,
         Medium = 2,
         Long = 3

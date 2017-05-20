@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
+    var maxResources = 5;
 }
 
 <h2>Create</h2>
@@ -19,6 +20,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Notebook, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Notebook, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Notebook, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -50,18 +59,13 @@
             @Html.LabelFor(model => model.Resources, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="form-inline">
-                    <div>
-                        @Html.EditorFor(model => model.Resources[0].Title, new { htmlAttributes = new { @class = "form-control", placeholder = "Resource 1" } })
-                        @Html.EditorFor(model => model.Resources[0].Url, new { htmlAttributes = new { @class = "form-control", placeholder = "http://resource1.com" } })
-                    </div>
-                    <div>
-                        @Html.EditorFor(model => model.Resources[1].Title, new { htmlAttributes = new { @class = "form-control", placeholder = "Resource 2" } })
-                        @Html.EditorFor(model => model.Resources[1].Url, new { htmlAttributes = new { @class = "form-control", placeholder = "http://resource2.com" } })
-                    </div>
-                    <div>
-                        @Html.EditorFor(model => model.Resources[2].Title, new { htmlAttributes = new { @class = "form-control", placeholder = "Resource 3" } })
-                        @Html.EditorFor(model => model.Resources[2].Url, new { htmlAttributes = new { @class = "form-control", placeholder = "http://resource3.com" } })
-                    </div>
+                    @for (var i = 0; i < maxResources; i++)
+                    {
+                        <div>
+                            @Html.TextBox($"Resources[{i}].Title", null, new { @class = "form-control", placeholder = "Resource " + (i + 1) })
+                            @Html.TextBox($"Resources[{i}].Url", null, new { @class = "form-control", placeholder = $"http://resource{i + 1}.com" })
+                        </div>
+                    }
                 </div>
             </div>
         </div>

@@ -145,10 +145,10 @@ namespace TheStudyList.Tests
             };
 
             // Act
-            Note note = ((ViewResult) target.Edit(1)).ViewData.Model as Note;
+            EditNoteViewModel model = ((ViewResult) target.Edit(1)).ViewData.Model as EditNoteViewModel;
 
             // Assert - ensure correct note is passed to View
-            Assert.AreEqual("Note 1", note.Title);
+            Assert.AreEqual("Note 1", model.Title);
         }
 
         [TestMethod]

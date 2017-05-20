@@ -1,4 +1,5 @@
-﻿@using TheStudyList.Domain.Entities
+﻿@using Castle.Core.Internal
+@using TheStudyList.Domain.Entities
 @model IEnumerable<Note>
 
 <table class="table table-bordered review">
@@ -29,17 +30,15 @@
                         @foreach (var resource in note.Resources)
                         {
                             <li>
-                                @if (resource.Url.IsEmpty())
+                                @if (String.IsNullOrWhiteSpace(resource.Url))
                                 {
                                     @resource.Title
                                 }
-                                else if (resource.IsEvernote())
-                                {
-                                    <a href="@resource.Url" class="evernote">@resource.Title</a>
-                                }
                                 else
                                 {
-                                    <a href="@resource.Url" target="_blank">@resource.Title</a>
+                                    <a href="@resource.Url" @(resource.IsEvernote() ? "class=evernote" : "target=_blank")>
+                                        @(String.IsNullOrWhiteSpace(resource.Title) ? resource.Url : resource.Title)
+                                    </a>
                                 }
                             </li>
                         }

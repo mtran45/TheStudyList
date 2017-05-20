@@ -55,6 +55,7 @@ namespace TheStudyList.Controllers
                 {
                     User = db.GetUserByID(GetUserId()),
                     Title = model.Title,
+                    Notebook = model.Notebook,
                     IntervalInDays = model.IntervalInDays,
                     DueDate = model.FirstStudiedDate + TimeSpan.FromDays(1),
                     FirstStudiedDate = model.FirstStudiedDate,
@@ -62,7 +63,8 @@ namespace TheStudyList.Controllers
                 };
                 foreach (var resource in model.Resources)
                 {
-                    if (string.IsNullOrWhiteSpace(resource.Title)) continue;
+                    if (String.IsNullOrWhiteSpace(resource.Title) 
+                        && String.IsNullOrWhiteSpace(resource.Url)) continue;
                     resource.Note = note;
                     db.InsertResource(resource);
                 }
@@ -89,41 +91,53 @@ namespace TheStudyList.Controllers
             {
                 return HttpNotFound();
             }
-            return View(note);
+            var model = new EditNoteViewModel
+            {
+                Id = note.Id,
+                Title = note.Title,
+                IntervalInDays = note.IntervalInDays,
+                DueDate = note.DueDate,
+                FirstStudiedDate = note.FirstStudiedDate,
+                Notebook = note.Notebook,
+                TimeEstimate = note.TimeEstimate,
+                Resources = note.Resources?.ToArray()
+            };
+            return View(model);
         }
 
         // POST: Note/Edit/5
         [HttpPost]
-        public ActionResult Edit(Note note, List<Resource> resourcesList)
+        public ActionResult Edit(EditNoteViewModel model)
         {
             if (ModelState.IsValid)
             {
-                UpdateNoteResources(note, resourcesList);
+                Note note = db.GetNoteByID(model.Id);
+                UpdateNoteResources(note, model);
                 db.UpdateNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
                 return RedirectToAction("Index");
             }
             TempData["errorMsg"] = "Failed to update note. Invalid data.";
-            return View(note);
+            return View(model);
         }
 
-        private void UpdateNoteResources(Note note, List<Resource> resources)
+        private void UpdateNoteResources(Note note, EditNoteViewModel model)
         {
-            // Reverse so items are inserted in correct order
-            resources.Reverse();
-            foreach (var resource in resources)
+            foreach (var resource in model.Resources)
             {
+                // Update/delete existing resources
                 if (resource.Id != 0)
                 {
-                    if (String.IsNullOrEmpty(resource.Title))
+                    if (String.IsNullOrWhiteSpace(resource.Title) && String.IsNullOrWhiteSpace(resource.Url))
                         db.DeleteResource(resource);
                     else
                     {
                         db.UpdateResource(resource);
                     }
                 }
-                else if (!String.IsNullOrEmpty(resource.Title))
+                // Add new resources to db
+                else if (!String.IsNullOrWhiteSpace(resource.Title))
                 {
                     resource.Note = note;
                     db.InsertResource(resource);

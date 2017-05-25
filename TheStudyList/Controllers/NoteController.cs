@@ -112,7 +112,7 @@ namespace TheStudyList.Controllers
             if (ModelState.IsValid)
             {
                 Note note = db.GetNoteByID(model.Id);
-                UpdateNoteResources(note, model);
+                UpdateNote(note, model);
                 db.UpdateNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
@@ -120,6 +120,17 @@ namespace TheStudyList.Controllers
             }
             TempData["errorMsg"] = "Failed to update note. Invalid data.";
             return View(model);
+        }
+
+        private void UpdateNote(Note note, EditNoteViewModel model)
+        {
+            note.Title = model.Title;
+            note.Notebook = model.Notebook;
+            note.IntervalInDays = model.IntervalInDays;
+            note.DueDate = model.DueDate;
+            note.FirstStudiedDate = model.FirstStudiedDate;
+            note.TimeEstimate = model.TimeEstimate;
+            UpdateNoteResources(note, model);
         }
 
         private void UpdateNoteResources(Note note, EditNoteViewModel model)

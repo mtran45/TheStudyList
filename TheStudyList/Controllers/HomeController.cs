@@ -12,7 +12,7 @@ namespace TheStudyList.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Note");
+                return RedirectToAction("StudyList", "Note");
             }
             return View();
         }

@@ -32,11 +32,11 @@ ul {
     color: #69AA35;
 }
 
-/* Index */
+/* Study List */
 
 table.review {
     table-layout: fixed;
-    width: 700px;
+    width: 730px;
 }
 
 table.review tr td {
@@ -55,7 +55,7 @@ table.review .due-today {
 #btn-study {
     height: 20px;
     width: 20px;
-    padding: 0px;
+    padding: 0;
 }
 
 .time-est-1 {
@@ -68,6 +68,10 @@ table.review .due-today {
 
 .time-est-3 {
     background-color: #f4c7c3;
+}
+
+.nav-pills {
+    margin-top: 10px;
 }
 
 /* Study */

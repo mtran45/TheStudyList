@@ -80,7 +80,7 @@ namespace TheStudyList.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Index", "Note");
+                    return RedirectToAction("StudyList", "Note");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

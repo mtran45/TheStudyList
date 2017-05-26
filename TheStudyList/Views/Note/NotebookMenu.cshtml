@@ -1,0 +1,20 @@
+﻿@model string[]
+    
+<ul class="nav nav-pills">
+    <li class="@(ViewBag.SelectedNotebook == null ? "active" : "")">
+        @Html.ActionLink("All Notes", "StudyList", "Note")
+    </li>
+
+    @foreach (var link in Model)
+    {
+        <li class="@(ViewBag.SelectedNotebook == link ? "active" : "")">
+           @Html.RouteLink(link, new
+           {
+               controller = "Note",
+               action = "StudyList",
+               notebook = link
+           })
+        </li>
+    }  
+</ul>
+

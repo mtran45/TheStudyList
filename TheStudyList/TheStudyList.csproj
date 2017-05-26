@@ -312,7 +312,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Note\Index.cshtml" />
+    <Content Include="Views\Note\StudyList.cshtml" />
     <Content Include="Views\Note\Create.cshtml" />
     <Content Include="Views\Note\Study.cshtml" />
     <Content Include="Views\Note\Edit.cshtml" />
@@ -320,6 +320,7 @@
     <Content Include="Views\Note\Delete.cshtml" />
     <Content Include="Views\Note\Import.cshtml" />
     <Content Include="Views\Manage\ChangeTimeZone.cshtml" />
+    <Content Include="Views\Note\NotebookMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

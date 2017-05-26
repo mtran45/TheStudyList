@@ -31,6 +31,52 @@ namespace TheStudyList.Tests
         }
 
         [TestMethod]
+        public void Get_Notebook_Initials()
+        {
+            var note1 = new Note { Notebook = "tesT" };
+            var note2 = new Note { Notebook = "Test String" };
+            var note3 = new Note { Notebook = "a test string" };
+            var note4 = new Note { Notebook = "a 'test" };
+            var note5 = new Note();
+
+            Assert.AreEqual("T", note1.NotebookInitials);
+            Assert.AreEqual("TS", note2.NotebookInitials);
+            Assert.AreEqual("AT", note3.NotebookInitials);
+            Assert.AreEqual("A'", note4.NotebookInitials);
+            Assert.AreEqual(null, note5.NotebookInitials);
+        }
+
+        [TestMethod]
+        public void Can_Filter_By_Notebook()
+        {
+            // Arrange - create the repo
+            var context = new TestContext();
+
+            context.Notes.Add(new Note { Id = 1, Title = "Note 1", Notebook = "NB1", User = user });
+            context.Notes.Add(new Note { Id = 2, Title = "Note 2", Notebook = "NB2", User = user });
+            context.Notes.Add(new Note { Id = 3, Title = "Note 3", Notebook = "NB1", User = user });
+            context.Notes.Add(new Note { Id = 4, Title = "Note 4", Notebook = "NB2", User = user });
+            context.Notes.Add(new Note { Id = 5, Title = "Note 5", Notebook = "NB3", User = user });
+
+            // Arrange - create the controller
+            NoteController target = new NoteController(context)
+            {
+                GetUserId = () => user.Id
+            };
+
+            // Act
+            ViewResult vr = (ViewResult)target.StudyList("NB2");
+            StudyListViewModel model = (StudyListViewModel)vr.Model;
+            Note[] notes = model.Notes.ToArray();
+
+            // Assert
+            Assert.AreEqual(2, notes.Length);
+            Assert.IsTrue(notes[0].Title == "Note 2" && notes[0].Notebook == "NB2");
+            Assert.IsTrue(notes[1].Title == "Note 4" && notes[0].Notebook == "NB2");
+
+        }
+
+        [TestMethod]
         public void Index_Returns_Users_Notes_Sorted_By_DueDate()
         {
             // Arrange - create the mock repo and its data
@@ -47,10 +93,12 @@ namespace TheStudyList.Tests
             };
 
             // Act
-            List<Note> notes = (((ViewResult) target.Index()).ViewData.Model as IEnumerable<Note>).ToList();
+            ViewResult vr = (ViewResult)target.StudyList(null);
+            StudyListViewModel model = (StudyListViewModel)vr.Model;
+            Note[] notes = model.Notes.ToArray();
 
             // Assert
-            Assert.AreEqual(2, notes.Count);
+            Assert.AreEqual(2, notes.Length);
             Assert.AreEqual(2, notes[0].Id);
             Assert.AreEqual(1, notes[1].Id);
         }

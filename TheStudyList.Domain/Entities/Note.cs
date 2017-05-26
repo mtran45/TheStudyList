@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace TheStudyList.Domain.Entities
 {
@@ -30,6 +30,15 @@ namespace TheStudyList.Domain.Entities
 
         [NotMapped]
         public DateTime DueDateLocal => TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone);
+        [NotMapped]
+        public string NotebookInitials {
+            get
+            {
+                // Return the first 2 initials of notebook
+                if (Notebook == null) return null;
+                return new string(Notebook.Split(' ').Select(w => w[0]).Take(2).ToArray()).ToUpper();
+            }
+        }
 
         public void UpdateInterval(int ivl)
         {

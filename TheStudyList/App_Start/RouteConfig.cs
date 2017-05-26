@@ -15,9 +15,26 @@ namespace TheStudyList
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "",
+                defaults: new { controller = "Home", action = "Index" }
             );
+
+            routes.MapRoute(
+                name: "Notebook",
+                url: "{controller}/{action}/{notebook}",
+                defaults: new { controller = "Note", action = "StudyList" }
+            );
+
+            routes.MapRoute(
+                name: "Other Actions",
+                url: "{controller}/{action}"
+            );
+
+            //            routes.MapRoute(
+            //                name: "Default",
+            //                url: "{controller}/{action}/{id}",
+            //                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //            );
         }
     }
 }

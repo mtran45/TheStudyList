@@ -1,0 +1,19 @@
+﻿@using System.Web.Mvc.Html
+@model TheStudyList.Models.StudyListViewModel
+
+@{
+    ViewBag.Title = (string.IsNullOrWhiteSpace(Model.CurrentNotebook) ? 
+        "All Notes" : Model.CurrentNotebook);
+}
+
+<div id="notebooks">
+    @Html.Action("NotebookMenu")
+</div>
+
+<h2>Due</h2>
+
+@Html.Partial("StudyListTable", Model.Notes.Where(n => n.IsDue() || n.IsOverdue()))
+
+<h2>Upcoming</h2>
+
+@Html.Partial("StudyListTable", Model.Notes.Where(n => !n.IsDue() && !n.IsOverdue()))

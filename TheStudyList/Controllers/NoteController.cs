@@ -28,15 +28,33 @@ namespace TheStudyList.Controllers
         }
 
         // GET: Note
-        public ActionResult Index()
+        public ActionResult StudyList(string notebook)
         {
             string curUser = GetUserId();
-            var notes = db.Notes
-                .Include(note => note.Resources)
-                .Include(note => note.User)
-                .Where(note => note.User.Id == curUser)
-                .OrderBy(note => note.DueDate);
-            return View(notes);
+            var model = new StudyListViewModel
+            {
+                Notes = db.Notes
+                    .Include(note => note.Resources)
+                    .Include(note => note.User)
+                    .Where(note => note.User.Id == curUser)
+                    .Where(note => notebook == null || note.Notebook == notebook)
+                    .OrderBy(note => note.DueDate)
+                    .ToList(),
+                CurrentNotebook = notebook
+            }; 
+            return View(model);
+        }
+
+        public PartialViewResult NotebookMenu(string notebook = null)
+        {
+            ViewBag.SelectedNotebook = notebook;
+
+            string[] notebooks = db.Notes
+                .Select(note => note.Notebook)
+                .Distinct()
+                .OrderBy(nb => nb).ToArray();
+            notebooks = notebooks.Where(nb => !string.IsNullOrWhiteSpace(nb)).ToArray();
+            return PartialView(notebooks);
         }
 
         // GET: Note/Create
@@ -77,7 +95,7 @@ namespace TheStudyList.Controllers
                 db.InsertNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully created the note \"{note.Title}\".";
-                return RedirectToAction("Index");
+                return RedirectToAction("StudyList");
             }
             TempData["errorMsg"] = "Failed. Please check the fields and try again.";
             return View(model);
@@ -116,7 +134,7 @@ namespace TheStudyList.Controllers
                 db.UpdateNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
-                return RedirectToAction("Index");
+                return RedirectToAction("StudyList");
             }
             TempData["errorMsg"] = "Failed to update note. Invalid data.";
             return View(model);
@@ -175,7 +193,7 @@ namespace TheStudyList.Controllers
             db.DeleteNote(note);
             db.SaveChanges();
             TempData["successMsg"] = "Successfully deleted note.";
-            return RedirectToAction("Index");
+            return RedirectToAction("StudyList");
         }
 
         // GET: Note/Study/5
@@ -207,7 +225,7 @@ namespace TheStudyList.Controllers
             };
             db.InsertReview(review);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("StudyList");
         }
 
         public ActionResult Import()
@@ -240,7 +258,7 @@ namespace TheStudyList.Controllers
                 db.SaveChanges();
             }
             TempData["successMsg"] = $"Successfully imported {entries} notes.";
-            return RedirectToAction("Index");
+            return RedirectToAction("StudyList");
         }
 
         private int ParseInterval(string str)

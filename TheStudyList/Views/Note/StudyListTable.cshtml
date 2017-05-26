@@ -5,6 +5,7 @@
 <table class="table table-bordered review">
     <thead>
     <tr>
+        <th class="text-center" style="width: 30px">NB</th>
         <th style="width: 150px">Title</th>
         <th class="text-center" style="width: 42px">Time</th>
         <th class="text-center" style="width: 50px">Due</th>
@@ -17,11 +18,14 @@
         @foreach (var note in Model)
         {
             <tr>
-                <td>@Html.ActionLink(note.Title, "Edit", new { id = note.Id })</td>
+                <td class="text-center">
+                    <span class="label label-primary" title="@note.Notebook">@note.NotebookInitials</span>
+                </td>
+                <td>@Html.ActionLink(note.Title, "Edit", new {id = note.Id})</td>
                 <td class="text-center time-est-@((int) note.TimeEstimate)">@note.TimeEstimate</td>
                 <td class="text-center @(note.IsOverdue() ? "overdue"
-                                         : note.IsDue() ? "due-today"
-                                         : "")" title="UTC: @note.DueDate.ToString() &#13;Local: @note.DueDateLocal.ToString()">
+                                             : note.IsDue() ? "due-today"
+                                                 : "")" title="UTC: @note.DueDate.ToString() &#13;Local: @note.DueDateLocal.ToString()">
                     @note.DueDateLocal.ToString("dd MMM")
                 </td>
                 <td class="text-center">@(note.IntervalInDays)d</td>
@@ -45,8 +49,8 @@
                     </ul>
                 </td>
                 <td class="text-center">
-                    @Html.ActionLink("✔", "Study", "Note", new { id = note.Id },
-                    new { @class = "btn btn-success", id = "btn-study" })
+                    @Html.ActionLink("✔", "Study", "Note", new {id = note.Id},
+                        new {@class = "btn btn-success", id = "btn-study"})
                 </td>
             </tr>
         }

@@ -6,6 +6,12 @@ using TheStudyList.Domain.Entities;
 
 namespace TheStudyList.Models
 {
+    public class StudyListViewModel
+    {
+        public List<Note> Notes { get; set; }
+        public string CurrentNotebook { get; set; }
+    }
+
     public class CreateNoteViewModel
     {
         [Required]

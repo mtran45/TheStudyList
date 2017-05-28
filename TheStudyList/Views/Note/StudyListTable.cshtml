@@ -21,12 +21,12 @@
                 <td class="text-center">
                     <span class="label label-primary" title="@note.Notebook">@note.NotebookInitials</span>
                 </td>
-                <td>@Html.ActionLink(note.Title, "Edit", new {id = note.Id})</td>
+                <td>@Html.ActionLink(note.Title, "Edit", new {id = note.Id, returnUrl = Request.Url.PathAndQuery})</td>
                 <td class="text-center time-est-@((int) note.TimeEstimate)">@note.TimeEstimate</td>
                 <td class="text-center @(note.IsOverdue() ? "overdue"
                                              : note.IsDue() ? "due-today"
-                                                 : "")" title="UTC: @note.DueDate.ToString() &#13;Local: @note.DueDateLocal.ToString()">
-                    @note.DueDateLocal.ToString("dd MMM")
+                                                 : "")" title="UTC: @note.DueDate.ToString() &#13;Local: @note.DueDateLocal().ToString()">
+                    @note.DueDateLocal().ToString("dd MMM")
                 </td>
                 <td class="text-center">@(note.IntervalInDays)d</td>
                 <td>
@@ -49,7 +49,7 @@
                     </ul>
                 </td>
                 <td class="text-center">
-                    @Html.ActionLink("✔", "Study", "Note", new {id = note.Id},
+                    @Html.ActionLink("✔", "Study", "Note", new {id = note.Id, returnUrl = Request.Url.PathAndQuery},
                         new {@class = "btn btn-success", id = "btn-study"})
                 </td>
             </tr>

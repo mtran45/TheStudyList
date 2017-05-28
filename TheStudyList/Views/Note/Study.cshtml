@@ -1,80 +1,71 @@
-﻿@using Ninject.Infrastructure.Language
-@model TheStudyList.Domain.Entities.Note
+﻿@model TheStudyList.Models.StudyViewModel
 
 @{
     ViewBag.Title = "Study";
-    int hard = Model.IntervalHard();
-    int good = Model.IntervalGood();
-    int easy = Model.IntervalEasy();
+    int hard = Model.Note.IntervalHard();
+    int good = Model.Note.IntervalGood();
+    int easy = Model.Note.IntervalEasy();
 }
 
-<h2>@Model.Title</h2>
+<h2>@Model.Note.Title</h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Note.Title)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Note.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.IntervalInDays)
+            @Html.DisplayNameFor(model => model.Note.IntervalInDays)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IntervalInDays)
+            @Html.DisplayFor(model => model.Note.IntervalInDays)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DueDate)
+            @Html.DisplayNameFor(model => model.Note.DueDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DueDate)
+            @Html.DisplayFor(model => model.Note.DueDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FirstStudiedDate)
+            @Html.DisplayNameFor(model => model.Note.FirstStudiedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FirstStudiedDate)
+            @Html.DisplayFor(model => model.Note.FirstStudiedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Notebook)
+            @Html.DisplayNameFor(model => model.Note.Notebook)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Notebook)
+            @Html.DisplayFor(model => model.Note.Notebook)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Topic)
+            @Html.DisplayNameFor(model => model.Note.TimeEstimate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Topic)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TimeEstimate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TimeEstimate)
+            @Html.DisplayFor(model => model.Note.TimeEstimate)
         </dd>
         
         <dt>
-            @Html.DisplayNameFor(model => model.Reviews)
+            @Html.DisplayNameFor(model => model.Note.Reviews)
         </dt>
         
         <dd>
-            @string.Join(", ", Model.Reviews.Select(r => r.Date.ToString("dd/MM/yy")).Reverse())
+            @string.Join(", ", Model.Note.Reviews.Select(r => r.Date.ToString("dd/MM/yy")).Reverse())
         </dd>
     </dl>
 </div>
@@ -83,10 +74,10 @@
 {
     <div class="well" id="well-study">
         <div class="btn-group">
-            @Html.HiddenFor(m => m.Id)
-            <button type="submit" class="btn btn-default" name="ivl" value="@(hard)">@(hard)d<br/>HARD</button>
-            <button type="submit" class="btn btn-default" name="ivl" value="@(good)">@(good)d<br/>GOOD</button>
-            <button type="submit" class="btn btn-default" name="ivl" value="@(easy)">@(easy)d<br/>EASY</button>
+            @Html.HiddenFor(model => model.Note.Id)
+            <button type="submit" class="btn btn-default" name="Interval" value="@(hard)">@(hard)d<br/>HARD</button>
+            <button type="submit" class="btn btn-default" name="Interval" value="@(good)">@(good)d<br/>GOOD</button>
+            <button type="submit" class="btn btn-default" name="Interval" value="@(easy)">@(easy)d<br/>EASY</button>
         </div>
         <div class="btn-group">
             <button class="btn btn-default" id="btn-custom-ivl" name="ivl" value="0">...</button>
@@ -95,8 +86,8 @@
 }
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "StudyList")
+    <a href ="@Model.ReturnUrl">Back to List</a> | 
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Note.Id, returnUrl = Model.ReturnUrl })
 </p>
 
 @section scripts
@@ -106,7 +97,6 @@
             $("#btn-custom-ivl").click(function () {
                 var ivl = prompt("Enter interval in days");
                 $(this).attr("value", ivl);
-                //$("form").submit();
             });
         });
     </script>

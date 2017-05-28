@@ -28,8 +28,11 @@ namespace TheStudyList.Domain.Entities
             FirstStudiedDate = DateTime.UtcNow;
         }
 
-        [NotMapped]
-        public DateTime DueDateLocal => TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone);
+        public DateTime DueDateLocal()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone);
+        }
+
         [NotMapped]
         public string NotebookInitials {
             get

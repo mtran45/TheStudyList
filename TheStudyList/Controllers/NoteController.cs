@@ -102,7 +102,7 @@ namespace TheStudyList.Controllers
         }
 
         // GET: Note/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, string returnUrl)
         {
             Note note = db.GetNoteByID(id);
             if (note == null)
@@ -118,7 +118,8 @@ namespace TheStudyList.Controllers
                 FirstStudiedDate = note.FirstStudiedDate,
                 Notebook = note.Notebook,
                 TimeEstimate = note.TimeEstimate,
-                Resources = note.Resources?.ToArray()
+                Resources = note.Resources?.ToArray(),
+                ReturnUrl = returnUrl
             };
             return View(model);
         }
@@ -134,7 +135,7 @@ namespace TheStudyList.Controllers
                 db.UpdateNote(note);
                 db.SaveChanges();
                 TempData["successMsg"] = $"Successfully updated the note \"{note.Title}\".";
-                return RedirectToAction("StudyList");
+                return Redirect(model.ReturnUrl);
             }
             TempData["errorMsg"] = "Failed to update note. Invalid data.";
             return View(model);
@@ -197,27 +198,32 @@ namespace TheStudyList.Controllers
         }
 
         // GET: Note/Study/5
-        public ActionResult Study(int? id)
+        public ActionResult Study(int? id, string returnUrl)
         {
             Note note = db.GetNoteByID(id);
             if (note == null)
             {
                 return HttpNotFound();
             }
-            return View(note);
+            var model = new StudyViewModel
+            {
+                Note = note,
+                ReturnUrl = returnUrl
+            };
+            return View(model);
         }
 
         // POST: Note/Study/5
         [HttpPost]
-        public ActionResult Study(int id, int? ivl)
+        public ActionResult Study(StudyViewModel model)
         {
-            Note note = db.GetNoteByID(id);
-            if (ivl == null || ivl <= 0)
+            Note note = db.GetNoteByID(model.Note.Id);
+            if (model.Interval == null || model.Interval <= 0)
             {
                 TempData["errorMsg"] = "Invalid interval.";
                 return View(note);
             }
-            note.UpdateInterval((int)ivl);
+            note.UpdateInterval((int)model.Interval);
             var review = new Review
             {
                 Date = DateTime.UtcNow,
@@ -225,7 +231,7 @@ namespace TheStudyList.Controllers
             };
             db.InsertReview(review);
             db.SaveChanges();
-            return RedirectToAction("StudyList");
+            return Redirect(model.ReturnUrl);
         }
 
         public ActionResult Import()

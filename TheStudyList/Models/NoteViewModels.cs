@@ -65,5 +65,14 @@ namespace TheStudyList.Models
         public Duration TimeEstimate { get; set; }
 
         public Resource[] Resources { get; set; }
+
+        public string ReturnUrl { get; set; }
+    }
+
+    public class StudyViewModel
+    {
+        public Note Note { get; set; }
+        public int? Interval { get; set; }
+        public string ReturnUrl { get; set; }
     }
 }

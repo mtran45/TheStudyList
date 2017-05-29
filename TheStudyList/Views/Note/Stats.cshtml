@@ -1,0 +1,128 @@
+﻿@model TheStudyList.Models.StatsViewModel
+
+@{
+    ViewBag.Title = "Stats";
+    int dayRange = 31;
+    int[] forecast = Model.Forecast(dayRange);
+    int[] reviews = Model.ReviewCount(dayRange);
+    int[] firstStudied = Model.FirstStudied(dayRange);
+}
+
+<h2>Stats - @(Model.Notebook ?? "All Notes")</h2>
+
+<h3>Forecast</h3>
+<div class="chart-container">
+    <canvas id="forecast-chart" height="300"></canvas>
+</div>
+
+<h3>Review Count</h3>
+<div class="chart-container">
+    <canvas id="reviews-chart" height="300"></canvas>
+</div>
+
+<h3>First Studied</h3>
+<div class="chart-container">
+    <canvas id="first-studied-chart" height="300"></canvas>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script>
+        var dayLabels = [];
+        for (var i = 0; i <= 30; i++)
+            dayLabels.push(i + "d");
+
+        var pastDayLabels = [];
+        for (var i = -30; i <= 0; i++)
+            pastDayLabels.push(i + "d");
+
+        var options =
+        {
+            legend: {
+                display: false
+            },
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 7,
+                        maxRotation: 0
+                    }
+                }]
+            }
+        }
+
+        $(document).ready(function() {
+            var forecastCtx = $("#forecast-chart");
+            var forecastChart = new Chart(forecastCtx,
+            {
+                type: 'bar',
+                data: {
+                    labels: dayLabels,
+                    datasets: [
+                        {
+                            label: 'Notes',
+                            data: @Html.Raw(Json.Encode(forecast)),
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255,99,132,1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: options
+            });
+
+            var reviewsCtx = $("#reviews-chart");
+            var reviewsChart = new Chart(reviewsCtx,
+            {
+                type: 'bar',
+                data: {
+                    labels: pastDayLabels,
+                    datasets: [
+                        {
+                            label: 'Notes',
+                            data: @Html.Raw(Json.Encode(reviews)),
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: options
+            });
+
+            var firstStudiedCtx = $("#first-studied-chart");
+            var firstStudiedChart = new Chart(firstStudiedCtx,
+            {
+                type: 'bar',
+                data: {
+                    labels: pastDayLabels,
+                    datasets: [
+                        {
+                            label: 'Notes',
+                            data: @Html.Raw(Json.Encode(firstStudied)),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: options
+            });
+        });
+    </script>
+}

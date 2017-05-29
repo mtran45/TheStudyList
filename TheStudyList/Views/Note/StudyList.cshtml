@@ -4,16 +4,18 @@
 @{
     ViewBag.Title = (string.IsNullOrWhiteSpace(Model.CurrentNotebook) ? 
         "All Notes" : Model.CurrentNotebook);
+    var dueNotes = Model.Notes.Where(n => n.IsDue() || n.IsOverdue());
+    var upcomingNotes = Model.Notes.Where(n => !n.IsDue() && !n.IsOverdue());
 }
 
 <div id="notebooks">
     @Html.Action("NotebookMenu")
 </div>
 
-<h2>Due</h2>
+<h3>Due (@dueNotes.Count())</h3>
 
-@Html.Partial("StudyListTable", Model.Notes.Where(n => n.IsDue() || n.IsOverdue()))
+@Html.Partial("StudyListTable", dueNotes)
 
-<h2>Upcoming</h2>
+<h3>Upcoming (@upcomingNotes.Count())</h3>
 
-@Html.Partial("StudyListTable", Model.Notes.Where(n => !n.IsDue() && !n.IsOverdue()))
+@Html.Partial("StudyListTable", upcomingNotes)

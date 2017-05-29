@@ -231,9 +231,12 @@ namespace TheStudyList.Controllers
             };
             db.InsertReview(review);
             db.SaveChanges();
+            if (model.ReturnUrl == null)
+                return RedirectToAction("StudyList");
             return Redirect(model.ReturnUrl);
         }
 
+        // GET: Note/Import
         public ActionResult Import()
         {
             return View();
@@ -280,6 +283,27 @@ namespace TheStudyList.Controllers
             else if (period == "w")
                 return count * 7;
             else return 1; // fallback to 1
+        }
+
+        // GET: Note/Stats
+        public ActionResult Stats(string notebook)
+        {
+            string curUser = GetUserId();
+            var model = new StatsViewModel
+            {
+                Notes = db.Notes
+                    .Include(note => note.Reviews)
+                    .Where(note => note.User.Id == curUser)
+                    .Where(note => notebook == null || note.Notebook == notebook)
+                    .ToList(),
+                Reviews = db.Reviews
+                    .Where(r => r.Note.User.Id == curUser)
+                    .Where(r => notebook == null || r.Note.Notebook == notebook)
+                    .ToList(),
+                TodayLocal = db.GetUserByID(GetUserId()).NowLocal().Date,
+                Notebook = notebook
+            };
+            return View(model);
         }
     }
 }

@@ -24,6 +24,7 @@
                     <li>@Html.ActionLink("List", "StudyList", "Note")</li>
                     <li>@Html.ActionLink("New Note", "Create", "Note")</li>
                     <li>@Html.ActionLink("Import", "Import", "Note")</li>
+                    <li>@Html.ActionLink("Stats", "Stats", "Note", new {notebook = ViewContext.RouteData.Values["notebook"]}, null)</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

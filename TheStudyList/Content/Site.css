@@ -91,3 +91,9 @@ table.review .due-today {
     resize: none;
     max-width: 100%;
 }
+
+/* Stats */
+.chart-container {
+    max-height: 200px;
+    max-width: 500px;
+}

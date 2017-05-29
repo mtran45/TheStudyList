@@ -165,13 +165,17 @@ namespace TheStudyList.Tests
             };
 
             // Act
-            var newInterval = 3;
-            target.Study(note.Id, newInterval);
+            var model = new StudyViewModel
+            {
+                Interval = 3,
+                Note = note
+            };
+            target.Study(model);
 
             // Assert - ensure interval and DueDate updated, and review created
             var savedNote = context.Notes.Single();
             var savedReview = context.Reviews.SingleOrDefault();
-            Assert.AreEqual(newInterval, savedNote.IntervalInDays);
+            Assert.AreEqual(3, savedNote.IntervalInDays);
             Assert.AreEqual(DateTime.Today.AddDays(3), savedNote.DueDate.Date);
             Assert.IsNotNull(savedReview);
             Assert.AreEqual(savedNote, savedReview.Note);
@@ -193,7 +197,7 @@ namespace TheStudyList.Tests
             };
 
             // Act
-            EditNoteViewModel model = ((ViewResult) target.Edit(1)).ViewData.Model as EditNoteViewModel;
+            EditNoteViewModel model = ((ViewResult) target.Edit(1, null)).ViewData.Model as EditNoteViewModel;
 
             // Assert - ensure correct note is passed to View
             Assert.AreEqual("Note 1", model.Title);
@@ -233,6 +237,68 @@ Queue	2	14 May	27d";
 
             Assert.AreEqual(Duration.Long, notes[1].TimeEstimate);
             Assert.AreEqual(4*7, notes[1].IntervalInDays);
+        }
+
+        [TestMethod]
+        public void Can_Generate_Forecast_Count_Array()
+        {
+            var model1 = new StatsViewModel
+            {
+                Notes = new List<Note>
+                {
+                    new Note {DueDate = DateTime.UtcNow.AddDays(-1), User = user},
+                    new Note {DueDate = DateTime.UtcNow.AddDays(-2), User = user},
+                    new Note {DueDate = DateTime.UtcNow.AddDays(-3), User = user},
+                }
+            };
+
+            int dayRange = 1;
+            var forecast1 = model1.Forecast(dayRange);
+            Assert.AreEqual(1, forecast1.Length);
+            Assert.AreEqual(3, forecast1[0]);
+
+            var model2 = new StatsViewModel
+            {
+                Notes = new List<Note>
+                {
+                    new Note {DueDate = DateTime.UtcNow.AddDays(-1), User = user},
+                    new Note {DueDate = DateTime.UtcNow.AddDays(1), User = user},
+                    new Note {DueDate = DateTime.UtcNow.AddDays(1).AddHours(-2), User = user},
+                }
+            };
+
+            int dayRange2 = 3;
+            var forecast2 = model2.Forecast(dayRange2);
+            Assert.AreEqual(dayRange2, forecast2.Length);
+            Assert.AreEqual(1, forecast2[0]);
+            Assert.AreEqual(2, forecast2[1]);
+            Assert.AreEqual(0, forecast2[2]);
+        }
+
+        [TestMethod]
+        public void Can_Generate_Review_Count_Array()
+        {
+            var note1 = new Note
+            {
+                User = user
+            };
+
+            var model1 = new StatsViewModel
+            {
+                Reviews = new List<Review>
+                {
+                    new Review
+                    {
+                        Date = DateTime.UtcNow.AddDays(0),
+                        Note = note1
+                    }
+                }
+            };
+
+            int dayRange = 2;
+            var reviews1 = model1.ReviewCount(dayRange);
+            Assert.AreEqual(2, reviews1.Length);
+            Assert.AreEqual(1, reviews1[dayRange - 1]); // day 0
         }
     }
 }

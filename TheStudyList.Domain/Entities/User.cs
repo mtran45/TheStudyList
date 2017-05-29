@@ -30,6 +30,12 @@ namespace TheStudyList.Domain.Entities
             TimeZoneId = "AUS Eastern Standard Time";
         }
 
+        // Returns the current time in user's timezone
+        public DateTime NowLocal()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZone);
+        }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

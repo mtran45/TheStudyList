@@ -70,15 +70,29 @@ namespace TheStudyList.Domain.Entities
         // Return true if due date is today in user's timezone
         public bool IsDue()
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone).Date
-                   == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, User.TimeZone).Date;
+            return DueDateLocal().Date == User.NowLocal().Date;
         }
 
         // Return true if due date has passed in user's timezone
         public bool IsOverdue()
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone).Date
-                < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, User.TimeZone).Date;
+            return DueDateLocal().Date < User.NowLocal().Date;
+        }
+
+        // Return the number of days until this note is due in the user's timezone
+        public int DaysUntilDue()
+        {
+            TimeSpan span = DueDateLocal().Date.Subtract(User.NowLocal().Date);
+            int days = (int) span.TotalDays;
+            return days < 0 ? 0 : days;
+        }
+
+        // Return the number of days since this note was first studied in the user's timezone
+        public int DaysSinceFirstStudied()
+        {
+            TimeSpan span = User.NowLocal().Date.Subtract(FirstStudiedDate.Date);
+            int days = (int)span.TotalDays;
+            return days;
         }
     }
 

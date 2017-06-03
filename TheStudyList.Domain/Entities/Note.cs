@@ -22,12 +22,6 @@ namespace TheStudyList.Domain.Entities
         public virtual ICollection<Resource> Resources { get; set; }
         public virtual IList<Review> Reviews { get; set; }
 
-        public Note()
-        {
-            DueDate = DateTime.UtcNow.Add(TimeSpan.FromDays(1));
-            FirstStudiedDate = DateTime.UtcNow;
-        }
-
         [NotMapped]
         public string NotebookInitials {
             get

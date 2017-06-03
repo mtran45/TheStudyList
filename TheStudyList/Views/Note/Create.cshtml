@@ -81,3 +81,15 @@
 <div>
     @Html.ActionLink("Back to List", "StudyList")
 </div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script>
+        $(document).ready(function() {
+            $("#Notebook").autocomplete({
+                source: @Html.Raw(Json.Encode(Model.Notebooks))
+            });
+        });
+    </script>
+}

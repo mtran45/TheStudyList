@@ -42,22 +42,29 @@ namespace TheStudyList.Controllers
             return View(model);
         }
 
-        public PartialViewResult NotebookMenu(string notebook = null)
+        public string[] GetNotebooks()
         {
-            ViewBag.SelectedNotebook = notebook;
-
             string[] notebooks = db.Notes
                 .Select(note => note.Notebook)
                 .Distinct()
                 .OrderBy(nb => nb).ToArray();
-            notebooks = notebooks.Where(nb => !string.IsNullOrWhiteSpace(nb)).ToArray();
-            return PartialView(notebooks);
+            return notebooks.Where(nb => !string.IsNullOrWhiteSpace(nb)).ToArray();
+        }
+
+        public PartialViewResult NotebookMenu(string notebook = null)
+        {
+            ViewBag.SelectedNotebook = notebook;
+            return PartialView(GetNotebooks());
         }
 
         // GET: Note/Create
         public ActionResult Create()
         {
-            return View(new CreateNoteViewModel());
+            return View(new CreateNoteViewModel
+            {
+                Notebook = GetNotebooks().Length > 0 ? GetNotebooks()[0] : null,
+                Notebooks = GetNotebooks()
+            });
         }
 
         // POST: Note/Create
@@ -118,7 +125,8 @@ namespace TheStudyList.Controllers
                 Notebook = note.Notebook,
                 TimeEstimate = note.TimeEstimate,
                 Resources = note.Resources?.ToArray(),
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                Notebooks = GetNotebooks()
             };
             return View(model);
         }

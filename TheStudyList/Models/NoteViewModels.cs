@@ -35,6 +35,8 @@ namespace TheStudyList.Models
         [DisplayName("Time Estimate")]
         public Duration TimeEstimate { get; set; }
 
+        public string[] Notebooks { get; set; }
+
         public CreateNoteViewModel()
         {
             IntervalInDays = 1;
@@ -74,6 +76,8 @@ namespace TheStudyList.Models
         public Resource[] Resources { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        public string[] Notebooks { get; set; }
     }
 
     public class StudyViewModel

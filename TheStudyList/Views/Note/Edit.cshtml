@@ -100,3 +100,15 @@
 <div>
     <a href="@Model.ReturnUrl">Back to List</a> | @Html.ActionLink("Delete", "Delete", new {id = Model.Id})
 </div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery-ui")
+    <script>
+        $(document).ready(function() {
+            $("#Notebook").autocomplete({
+                source: @Html.Raw(Json.Encode(Model.Notebooks))
+            });
+        });
+    </script>
+}

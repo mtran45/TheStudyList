@@ -23,6 +23,13 @@ textarea {
     max-width: 280px;
 }
 
+.alert {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+/* Study List */
+
 ul {
     margin: 0;
     padding-left: 15px;
@@ -31,8 +38,6 @@ ul {
 .evernote, .evernote:hover {
     color: #69AA35;
 }
-
-/* Study List */
 
 table.review {
     table-layout: fixed;

@@ -30,10 +30,10 @@ namespace TheStudyList.Domain.Entities
             TimeZoneId = "AUS Eastern Standard Time";
         }
 
-        // Returns the current time in user's timezone
-        public DateTime NowLocal()
+        // Takes a UTC dateTime and coverts it to user's timezone
+        public DateTime ToLocalTime(DateTime dt)
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZone);
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)

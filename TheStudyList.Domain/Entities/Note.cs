@@ -28,11 +28,6 @@ namespace TheStudyList.Domain.Entities
             FirstStudiedDate = DateTime.UtcNow;
         }
 
-        public DateTime DueDateLocal()
-        {
-            return TimeZoneInfo.ConvertTimeFromUtc(DueDate, User.TimeZone);
-        }
-
         [NotMapped]
         public string NotebookInitials {
             get
@@ -70,19 +65,21 @@ namespace TheStudyList.Domain.Entities
         // Return true if due date is today in user's timezone
         public bool IsDue()
         {
-            return DueDateLocal().Date == User.NowLocal().Date;
+            return DueDate.ToLocalTime(User).Date == DateTime.UtcNow.ToLocalTime(User).Date;
         }
 
         // Return true if due date has passed in user's timezone
         public bool IsOverdue()
         {
-            return DueDateLocal().Date < User.NowLocal().Date;
+            return DueDate.ToLocalTime(User).Date < DateTime.UtcNow.ToLocalTime(User).Date;
         }
 
         // Return the number of days until this note is due in the user's timezone
         public int DaysUntilDue()
         {
-            TimeSpan span = DueDateLocal().Date.Subtract(User.NowLocal().Date);
+            DateTime dueDateLocal = DueDate.ToLocalTime(User).Date;
+            DateTime todayLocal = DateTime.UtcNow.ToLocalTime(User).Date;
+            TimeSpan span = dueDateLocal.Subtract(todayLocal);
             int days = (int) span.TotalDays;
             return days < 0 ? 0 : days;
         }
@@ -90,7 +87,9 @@ namespace TheStudyList.Domain.Entities
         // Return the number of days since this note was first studied in the user's timezone
         public int DaysSinceFirstStudied()
         {
-            TimeSpan span = User.NowLocal().Date.Subtract(FirstStudiedDate.Date);
+            DateTime todayLocal = DateTime.UtcNow.ToLocalTime(User).Date;
+            DateTime firstStudiedLocal = FirstStudiedDate.ToLocalTime(User).Date;
+            TimeSpan span = todayLocal.Subtract(firstStudiedLocal);
             int days = (int)span.TotalDays;
             return days;
         }
@@ -102,5 +101,23 @@ namespace TheStudyList.Domain.Entities
         Short = 1,
         Medium = 2,
         Long = 3
+    }
+
+    public static class DateTimeExtensions
+    {
+        public static DateTime ToLocalTime(this DateTime utc, User user)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(utc, user.TimeZone);
+        }
+
+        public static DateTime FromLocalTime(this DateTime local, User user)
+        {
+            return TimeZoneInfo.ConvertTimeToUtc(local, user.TimeZone);
+        }
+
+        public static DateTime ToTimeZone(this DateTime utc, TimeZoneInfo tz)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(utc, tz);
+        }
     }
 }

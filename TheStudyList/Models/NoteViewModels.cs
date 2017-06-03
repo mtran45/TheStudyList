@@ -25,6 +25,8 @@ namespace TheStudyList.Models
         public int IntervalInDays { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DisplayName("First Studied Date")]
         public DateTime FirstStudiedDate { get; set; }
 
@@ -55,10 +57,14 @@ namespace TheStudyList.Models
         public int IntervalInDays { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DisplayName("Due Date")]
         public DateTime DueDate { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DisplayName("First Studied Date")]
         public DateTime FirstStudiedDate { get; set; }
 
@@ -72,9 +78,30 @@ namespace TheStudyList.Models
 
     public class StudyViewModel
     {
-        public Note Note { get; set; }
-        public int? Interval { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+
+        [DisplayName("Interval (Days)")]
+        public int IntervalInDays { get; set; }
+
+        [DisplayName("Due Date")]
+        public DateTime DueDate { get; set; }
+
+        [DisplayName("First Studied Date")]
+        public DateTime FirstStudiedDate { get; set; }
+
+        public string Notebook { get; set; }
+
+        [DisplayName("Time Estimate")]
+        public Duration TimeEstimate { get; set; }
+
+        public List<Review> Reviews { get; set; }
+        public int IntervalHard { get; set; }
+        public int IntervalGood { get; set; }
+        public int IntervalEasy { get; set; }
         public string ReturnUrl { get; set; }
+
+        public int? Interval { get; set; }
     }
 
     public class StatsViewModel

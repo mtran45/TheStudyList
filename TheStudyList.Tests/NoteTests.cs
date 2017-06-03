@@ -168,7 +168,10 @@ namespace TheStudyList.Tests
             var model = new StudyViewModel
             {
                 Interval = 3,
-                Note = note
+                Id = note.Id,
+                Title = note.Title,
+                IntervalInDays = note.IntervalInDays,
+                FirstStudiedDate = note.FirstStudiedDate,
             };
             target.Study(model);
 
@@ -187,6 +190,7 @@ namespace TheStudyList.Tests
         {
             // Arrange
             var context = new TestContext();
+            context.Users.Add(user);
 
             context.Notes.Add(new Note() { Id = 1, Title = "Note 1", DueDate = DateTime.Parse("02-01-17"), User = user });
 
@@ -230,7 +234,7 @@ Queue	2	14 May	27d";
             var notes = context.Notes.ToList();
             Assert.AreEqual("CTCI IV - Before the Interview", notes[0].Title);
             Assert.AreEqual(Duration.Short, notes[0].TimeEstimate);
-            Assert.AreEqual(DateTime.Parse("14/5/17"), notes[0].DueDate);
+            Assert.AreEqual(DateTime.Parse("14/5/17").ToUniversalTime(), notes[0].DueDate);
             Assert.AreEqual(21, notes[0].IntervalInDays);
             Assert.AreEqual(notebook, notes[0].Notebook);
             Assert.AreEqual(user, notes[0].User);

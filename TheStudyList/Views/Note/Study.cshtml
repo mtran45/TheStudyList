@@ -2,70 +2,67 @@
 
 @{
     ViewBag.Title = "Study";
-    int hard = Model.Note.IntervalHard();
-    int good = Model.Note.IntervalGood();
-    int easy = Model.Note.IntervalEasy();
 }
 
-<h2>@Model.Note.Title</h2>
+<h2>@Model.Title</h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Note.Title)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.Title)
+            @Html.DisplayFor(model => model.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Note.IntervalInDays)
+            @Html.DisplayNameFor(model => model.IntervalInDays)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.IntervalInDays)
+            @Html.DisplayFor(model => model.IntervalInDays)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Note.DueDate)
+            @Html.DisplayNameFor(model => model.DueDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.DueDate)
+            @Html.DisplayFor(model => model.DueDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Note.FirstStudiedDate)
+            @Html.DisplayNameFor(model => model.FirstStudiedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.FirstStudiedDate)
+            @Html.DisplayFor(model => model.FirstStudiedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Note.Notebook)
+            @Html.DisplayNameFor(model => model.Notebook)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.Notebook)
+            @Html.DisplayFor(model => model.Notebook)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Note.TimeEstimate)
+            @Html.DisplayNameFor(model => model.TimeEstimate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Note.TimeEstimate)
+            @Html.DisplayFor(model => model.TimeEstimate)
         </dd>
         
         <dt>
-            @Html.DisplayNameFor(model => model.Note.Reviews)
+            @Html.DisplayNameFor(model => model.Reviews)
         </dt>
         
         <dd>
-            @string.Join(", ", Model.Note.Reviews.Select(r => r.Date.ToString("dd/MM/yy")).Reverse())
+            @string.Join(", ", Model.Reviews.Select(r => r.Date.ToString("dd/MM/yy")).Reverse())
         </dd>
     </dl>
 </div>
@@ -74,20 +71,20 @@
 {
     <div class="well" id="well-study">
         <div class="btn-group">
-            @Html.HiddenFor(model => model.Note.Id)
-            <button type="submit" class="btn btn-default" name="Interval" value="@(hard)">@(hard)d<br/>HARD</button>
-            <button type="submit" class="btn btn-default" name="Interval" value="@(good)">@(good)d<br/>GOOD</button>
-            <button type="submit" class="btn btn-default" name="Interval" value="@(easy)">@(easy)d<br/>EASY</button>
+            @Html.HiddenFor(model => model.Id)
+            <button type="submit" class="btn btn-default" name="Interval" value="@(Model.IntervalHard)">@(Model.IntervalHard)d<br/>HARD</button>
+            <button type="submit" class="btn btn-default" name="Interval" value="@(Model.IntervalGood)">@(Model.IntervalGood)d<br/>GOOD</button>
+            <button type="submit" class="btn btn-default" name="Interval" value="@(Model.IntervalEasy)">@(Model.IntervalEasy)d<br/>EASY</button>
         </div>
         <div class="btn-group">
-            <button class="btn btn-default" id="btn-custom-ivl" name="ivl" value="0">...</button>
+            <button class="btn btn-default" id="btn-custom-ivl" name="Interval" value="0">...</button>
         </div>
     </div>
 }
 
 <p>
     <a href ="@Model.ReturnUrl">Back to List</a> | 
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Note.Id, returnUrl = Model.ReturnUrl })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id, returnUrl = Model.ReturnUrl })
 </p>
 
 @section scripts

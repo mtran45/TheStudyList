@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CsvHelper;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Razor.Text;
-using CsvHelper;
-using Microsoft.AspNet.Identity;
 using TheStudyList.Domain.Abstract;
 using TheStudyList.Domain.Entities;
 using TheStudyList.Models;
@@ -69,14 +66,15 @@ namespace TheStudyList.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = db.GetUserByID(GetUserId());
                 var note = new Note
                 {
-                    User = db.GetUserByID(GetUserId()),
+                    User = user,
                     Title = model.Title,
                     Notebook = model.Notebook,
                     IntervalInDays = model.IntervalInDays,
-                    DueDate = model.FirstStudiedDate + TimeSpan.FromDays(1),
-                    FirstStudiedDate = model.FirstStudiedDate,
+                    DueDate = model.FirstStudiedDate.FromLocalTime(user) + TimeSpan.FromDays(1),
+                    FirstStudiedDate = model.FirstStudiedDate.FromLocalTime(user),
                     TimeEstimate = model.TimeEstimate
                 };
                 foreach (var resource in model.Resources)
@@ -104,6 +102,7 @@ namespace TheStudyList.Controllers
         // GET: Note/Edit/5
         public ActionResult Edit(int? id, string returnUrl)
         {
+            var user = db.GetUserByID(GetUserId());
             Note note = db.GetNoteByID(id);
             if (note == null)
             {
@@ -114,8 +113,8 @@ namespace TheStudyList.Controllers
                 Id = note.Id,
                 Title = note.Title,
                 IntervalInDays = note.IntervalInDays,
-                DueDate = note.DueDate,
-                FirstStudiedDate = note.FirstStudiedDate,
+                DueDate = note.DueDate.ToLocalTime(user),
+                FirstStudiedDate = note.FirstStudiedDate.ToLocalTime(user),
                 Notebook = note.Notebook,
                 TimeEstimate = note.TimeEstimate,
                 Resources = note.Resources?.ToArray(),
@@ -143,11 +142,12 @@ namespace TheStudyList.Controllers
 
         private void UpdateNote(Note note, EditNoteViewModel model)
         {
+            var user = db.GetUserByID(GetUserId());
             note.Title = model.Title;
             note.Notebook = model.Notebook;
             note.IntervalInDays = model.IntervalInDays;
-            note.DueDate = model.DueDate;
-            note.FirstStudiedDate = model.FirstStudiedDate;
+            note.DueDate = model.DueDate.FromLocalTime(user);
+            note.FirstStudiedDate = model.FirstStudiedDate.FromLocalTime(user);
             note.TimeEstimate = model.TimeEstimate;
             UpdateNoteResources(note, model);
         }
@@ -200,6 +200,7 @@ namespace TheStudyList.Controllers
         // GET: Note/Study/5
         public ActionResult Study(int? id, string returnUrl)
         {
+            var user = db.GetUserByID(GetUserId());
             Note note = db.GetNoteByID(id);
             if (note == null)
             {
@@ -207,7 +208,17 @@ namespace TheStudyList.Controllers
             }
             var model = new StudyViewModel
             {
-                Note = note,
+                Id = note.Id,
+                Title = note.Title,
+                IntervalInDays = note.IntervalInDays,
+                DueDate = note.DueDate.ToLocalTime(user),
+                FirstStudiedDate = note.FirstStudiedDate.ToLocalTime(user),
+                Notebook = note.Notebook,
+                TimeEstimate = note.TimeEstimate,
+                Reviews = note.Reviews.ToList(),
+                IntervalHard = note.IntervalHard(),
+                IntervalGood = note.IntervalGood(),
+                IntervalEasy = note.IntervalEasy(),
                 ReturnUrl = returnUrl
             };
             return View(model);
@@ -217,7 +228,7 @@ namespace TheStudyList.Controllers
         [HttpPost]
         public ActionResult Study(StudyViewModel model)
         {
-            Note note = db.GetNoteByID(model.Note.Id);
+            Note note = db.GetNoteByID(model.Id);
             if (model.Interval == null || model.Interval <= 0)
             {
                 TempData["errorMsg"] = "Invalid interval.";
@@ -245,6 +256,7 @@ namespace TheStudyList.Controllers
         [HttpPost]
         public ActionResult Import(string notebook, string tsvString)
         {
+            var user = db.GetUserByID(GetUserId());
             int entries = 0;
             using (TextReader tr = new StringReader(tsvString))
             {
@@ -254,10 +266,10 @@ namespace TheStudyList.Controllers
                 {
                     var note = new Note
                     {
-                        User = db.GetUserByID(GetUserId()),
+                        User = user,
                         Title = tsv.GetField<string>(0),
                         TimeEstimate = tsv.GetField<Duration>(1),
-                        DueDate = tsv.GetField<DateTime>(2),
+                        DueDate = tsv.GetField<DateTime>(2).FromLocalTime(user),
                         IntervalInDays = ParseInterval(tsv.GetField<string>(3)),
                         Notebook = notebook
                     };
@@ -288,6 +300,7 @@ namespace TheStudyList.Controllers
         // GET: Note/Stats
         public ActionResult Stats(string notebook)
         {
+            var user = db.GetUserByID(GetUserId());
             string curUser = GetUserId();
             var model = new StatsViewModel
             {
@@ -300,7 +313,7 @@ namespace TheStudyList.Controllers
                     .Where(r => r.Note.User.Id == curUser)
                     .Where(r => notebook == null || r.Note.Notebook == notebook)
                     .ToList(),
-                TodayLocal = db.GetUserByID(GetUserId()).NowLocal().Date,
+                TodayLocal = DateTime.UtcNow.ToLocalTime(user).Date,
                 Notebook = notebook
             };
             return View(model);
